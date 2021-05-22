@@ -1,3 +1,4 @@
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -17,14 +18,13 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private messagePatientService: MessagePatientService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
-    private http: HttpClient
+    private http: HttpClient,
+    private angularFirestore: AngularFirestore
   ) {}
   faRobot = faRobot;
   sub: Subscription;
 
-  id: number;
+  id;
 
   messagePatientDetails;
 
@@ -41,19 +41,45 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
       title: 'Hummingbirds are amazing creatures',
     },
   ];
+  showFlag: boolean = false;
+  selectedImageIndex: number = -1;
+
+  currentIndex: any = -1;
+
   //send items
+  imageAfterML: Array<any> = [
+    {
+      image: '',
+      thumbImage: '',
+      title: 'Hummingbirds are amazing creatures',
+    },
+  ];
+  showFlagAfterML: boolean = false;
+  currentIndexAfterML: any = -1;
+
+  sending: boolean = false;
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
+
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'];
-      console.log(this.id);
+      console.log('this ', this.id);
       this.messagePatientService.getMessage(this.id).then((e) =>
         e.subscribe((f) => {
           console.log(f.data());
           this.messagePatientDetails = f.data();
+          this.imageAIUrl = this.messagePatientDetails.imageUrlAfterAI;
+          console.log('this.imageAIUrlL :', this.imageAIUrl);
           this.imageObject[0].image = this.messagePatientDetails.imageUrl;
-          this.imageObject[0].thumbImage = this.messagePatientDetails.imageUrl;
+          this.imageObject[0].thumbImage = 'Patient Image ';
+          if (this.messagePatientDetails.imageUrlAfterAI) {
+            console.log('hiii');
+            this.imageAfterML[0].image =
+              this.messagePatientDetails.imageUrlAfterAI;
+            this.imageAfterML[0].thumbImage =
+              'Patient Image After Machine Learning';
+          }
         })
       );
     });
@@ -61,6 +87,7 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
 
   sendToAIConverter() {
     this.showSpinner = true;
+
     this.http
       .post('http://localhost:8000/api/image/', {
         imageURL: this.messagePatientDetails.imageUrl,
@@ -68,6 +95,14 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
       .subscribe((result: any) => {
         console.log(result);
         this.imageAIUrl = result;
+        this.imageAfterML[0].image = result;
+        this.imageAfterML[0].thumbImage =
+          'Patient Image After Machine Learning';
+
+        console.log('imageAfterML: ', this.imageAfterML);
+        this.angularFirestore.collection('messages').doc(this.id).update({
+          imageUrlAfterAI: result,
+        });
         this.imageAIReceived = true;
         this.showSpinner = false;
       });
@@ -76,18 +111,21 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
     //this.sub.unsubscribe();
   }
 
-  showFlag: boolean = false;
-  selectedImageIndex: number = -1;
-
-  currentIndex: any = -1;
-
   showLightbox(index) {
     this.currentIndex = index;
     this.showFlag = true;
   }
-
   closeEventHandler() {
     this.showFlag = false;
     this.currentIndex = -1;
+  }
+  showLightboxAfterML(index) {
+    this.currentIndexAfterML = index;
+    this.showFlagAfterML = true;
+  }
+
+  closeEventHandlerAfterML() {
+    this.showFlagAfterML = false;
+    this.currentIndexAfterML = -1;
   }
 }

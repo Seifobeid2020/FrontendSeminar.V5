@@ -126,8 +126,8 @@ body {
   border-radius: 10px;
 }
 .spinner-wrapper {
-  width: 300px;
+  /* width: 300px;
   height: 131px;
   border: 1px solid slategrey;
-  border-radius: 10px;
+  border-radius: 10px; */
 }

@@ -1,54 +1,65 @@
 <div class="p-grid p-ai-center p-ml-2" *ngIf="messagePatientDetails">
   <div class="p-col-12 p-sm-12 p-lg-12 p-xl-8">
-    <div class="p-grid p-jc-between">
-      <div class="p-col-4 p-as-center">
-        <img
-          [src]="messagePatientDetails.imageUrl"
-          [alt]="messagePatientDetails.imageUrl"
-          width="300"
-          (click)="showLightbox(0)"
-          class="image-wrapper"
-        />
-      </div>
-      <ng-image-fullscreen-view
-        [images]="imageObject"
-        [show]="showFlag"
-        (close)="closeEventHandler()"
-      ></ng-image-fullscreen-view>
+    <div class="p-d-flex p-jc-center">
+      <div class="p-grid p-jc-between">
+        <div class="p-col-7 p-offset-4 p-as-center">
+          <img
+            [src]="messagePatientDetails.imageUrl"
+            [alt]="messagePatientDetails.imageUrl"
+            width="300"
+            (click)="showLightbox(0)"
+            class="image-wrapper"
+          />
+        </div>
+        <ng-image-fullscreen-view
+          [images]="imageObject"
+          [show]="showFlag"
+          (close)="closeEventHandler()"
+        ></ng-image-fullscreen-view>
 
-      <div class="p-col-12 p-sm-12 p-lg-12 p-xl-4 p-as-center">
-        <div class="p-grid">
-          <div class="p-col-8 p-offset-3">
-            <div class="box">
-              <button
-                pButton
-                pRipple
-                label=" Send to AI"
-                class="p-button-success p-mr-2"
-                (click)="sendToAIConverter()"
-              >
-                <fa-icon [icon]="faRobot" style="padding-right: 5px"></fa-icon>
-              </button>
+        <div class="p-col-12 p-as-center">
+          <div class="p-grid">
+            <div class="p-col-6 p-offset-6">
+              <div class="box">
+                <button
+                  pButton
+                  pRipple
+                  label=" Send to AI"
+                  class="p-button-success p-mr-2"
+                  (click)="sendToAIConverter()"
+                >
+                  <fa-icon
+                    [icon]="faRobot"
+                    style="padding-right: 5px"
+                  ></fa-icon>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="p-col-4 p-as-center spinner-wrapper">
-        <div class="p-grid">
-          <div class="p-col-6 p-offset-3">
-            <div class="box">
-              <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+        <div class="p-col-7 p-offset-4 p-as-center spinner-wrapper">
+          <div class="p-grid">
+            <div class="p-col-4 p-offset-4">
+              <div class="box">
+                <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+              </div>
             </div>
           </div>
+          <img
+            *ngIf="imageAIUrl && !showSpinner"
+            src="{{ imageAIUrl }}"
+            alt="A image"
+            width="300"
+            #myImg
+            class="image-wrapper"
+            (click)="showLightboxAfterML(0)"
+          />
+          <ng-image-fullscreen-view
+            [images]="imageAfterML"
+            [show]="showFlagAfterML"
+            (close)="closeEventHandlerAfterML()"
+          ></ng-image-fullscreen-view>
         </div>
-        <img
-          *ngIf="imageAIUrl && imageAIReceived"
-          src="{{ imageAIUrl }}"
-          alt="A image"
-          width="300"
-          #myImg
-          class="image-wrapper"
-        />
       </div>
     </div>
   </div>
