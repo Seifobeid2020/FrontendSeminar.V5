@@ -16,10 +16,13 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { TableModule } from 'primeng/table';
 import { ProfileComponent } from './profile/profile.component';
 import { ToastModule } from 'primeng/toast';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { DropdownModule } from 'primeng/dropdown';
+import { ProgressBarModule } from 'primeng/progressbar';
+
 @NgModule({
   declarations: [DentistComponent, DashboardComponent, ProfileComponent],
   imports: [
@@ -40,6 +43,10 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     FormsModule,
     DialogModule,
     ConfirmDialogModule,
+    //ractive form
+    ReactiveFormsModule,
+    DropdownModule,
+    ProgressBarModule,
   ],
 
   providers: [MessagePatientService, MessageService, ConfirmationService],

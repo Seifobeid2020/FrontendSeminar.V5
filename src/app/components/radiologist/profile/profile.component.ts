@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgModule } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { Observable } from 'rxjs';
@@ -16,6 +16,10 @@ import { finalize } from 'rxjs/operators';
 })
 export class ProfileComponent implements OnInit {
   @ViewChild('formEditProfile', { static: true }) formEditProfile: NgForm;
+  @ViewChild('password', { static: true }) password: NgModule;
+  @ViewChild('passwordConfirm', { static: true }) passwordConfirm: NgModule;
+
+  changePasswordForm: FormGroup;
 
   userData: any;
   inEditUserData;
@@ -40,6 +44,20 @@ export class ProfileComponent implements OnInit {
     private storage: AngularFireStorage
   ) {}
   ngOnInit() {
+    this.changePasswordForm = new FormGroup({
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(
+          '(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=[^0-9]*[0-9]).{8,}'
+        ),
+      ]),
+      passwordConfirm: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(
+          '(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=[^0-9]*[0-9]).{8,}'
+        ),
+      ]),
+    });
     this.userData = this.authService.getUser();
     this.inEditUserData = { ...this.userData };
     this.user = firebase.auth().currentUser;
@@ -78,6 +96,18 @@ export class ProfileComponent implements OnInit {
     // this.submitted = false;
     this.isEditMode = false;
     this.changePasswordDialog = false;
+  }
+  hideChangePasswordDialog() {
+    // this.editUserPhotoDialog = false;
+    // // this.submitted = false;
+    // this.isEditMode = false;
+    this.changePasswordDialog = false;
+    console.log(this.changePasswordForm.get('password'));
+    this.changePasswordForm.get('password').setValue(null);
+    this.changePasswordForm.get('password').setErrors(null);
+    this.changePasswordForm.get('passwordConfirm').setValue(null);
+    this.changePasswordForm.get('passwordConfirm').setErrors(null);
+    // this.changePasswordForm.;
   }
   //Dialog Part
 
@@ -138,9 +168,14 @@ export class ProfileComponent implements OnInit {
   //  Change & Upload Password
 
   onSaveChangePassword() {
-    this.changePasswordDialog = false;
+    console.log(this.passwordConfirm);
+    console.log(this.password);
 
-    this.user.updatePassword();
+    this.user
+      .updatePassword(this.changePasswordForm.get('password').value)
+      .then((s) => console.log(s))
+      .catch((err) => console.log(err));
+    this.changePasswordDialog = false;
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
@@ -255,6 +290,10 @@ export class ProfileComponent implements OnInit {
   }
   onClickChangePassword() {
     this.changePasswordDialog = true;
+    this.changePasswordForm.get('password').setValue(null);
+    this.changePasswordForm.get('password').setErrors(null);
+    this.changePasswordForm.get('passwordConfirm').setValue(null);
+    this.changePasswordForm.get('passwordConfirm').setErrors(null);
   }
   onClickOpenEditUserPhoto() {
     this.editUserPhotoDialog = true;
@@ -271,7 +310,9 @@ export class ProfileComponent implements OnInit {
     console.log(this.selectedCity);
     this.inEditUserData.city = this.selectedCity.name;
   }
-  onPasswordSubmit(formChangePassword) {}
+  onPasswordSubmit() {
+    console.log(this.changePasswordForm);
+  }
   cities: any[] = [
     { value: 'Jerusalem', name: 'Jerusalem' },
     { value: 'Bethlehem', name: 'Bethlehem' },

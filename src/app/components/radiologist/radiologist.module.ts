@@ -26,7 +26,7 @@ import { ConfirmationService, SharedModule } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 
 import { MenubarModule } from 'primeng/menubar';
@@ -85,6 +85,8 @@ import { ProfileComponent } from './profile/profile.component';
     PanelMenuModule,
     SharedModule,
     ClickOutsideModule,
+    //ractive form
+    ReactiveFormsModule,
   ],
   exports: [],
   providers: [MessageService, ConfirmationService],

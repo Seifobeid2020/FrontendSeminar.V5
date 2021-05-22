@@ -100,3 +100,14 @@ input[type="email"].ng-invalid.ng-touched {
 .help-block {
   color: red;
 }
+.p-button-text-password {
+  height: 39px;
+  width: inherit;
+  margin: 0 10px;
+}
+.password-buttons-wrapper {
+  float: right;
+}
+input[type="password"].ng-invalid.ng-touched {
+  border: 1px solid red;
+}

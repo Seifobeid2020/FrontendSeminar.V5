@@ -187,6 +187,7 @@
         type="file"
         class="text-nowrap text-truncate"
         (change)="selectFile($event)"
+        accept="image/*"
         #fileInput
       />
       <p-button
@@ -196,6 +197,25 @@
         (click)="fileInput.click()"
       ></p-button>
       {{ fileName ? fileName : "" }}
+      <div
+        *ngIf="uploadProgress$ | async | number: '1.0-0' as progress"
+        class="progress-wrapper"
+      >
+        <p-progressBar
+          [value]="progress"
+          [style]="{ 'border-radius': '30px' }"
+        ></p-progressBar>
+        <!-- <div
+          class="progress-bar progress-bar-info"
+          role="progressbar"
+          attr.aria-valuenow="{{ progress }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [ngStyle]="{ width: progress + '%' }"
+        >
+          {{ progress }}%
+        </div> -->
+      </div>
     </div>
   </ng-template>
 

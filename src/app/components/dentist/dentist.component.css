@@ -173,11 +173,14 @@
 }
 /* new stage */
 .profile-image {
+  height: 50px;
   width: 50px;
+
   border-radius: 50%;
   cursor: pointer;
   margin-right: 15px;
 }
+
 .dropdown-menu-profile-account {
   position: absolute;
   width: 270px;

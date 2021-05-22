@@ -309,40 +309,92 @@
   [modal]="true"
   styleClass="p-fluid"
 >
-  <div class="p-field">
-    <label for="password">Password</label>
-    <input type="text" pInputText id="password" value="" required autofocus />
-  </div>
-  <div class="p-field">
-    <label for="passwordConform">Password Conform</label>
-    <input
-      type="text"
-      pInputText
-      id="passwordConform"
-      value=""
-      required
-      autofocus
-    />
-  </div>
-  <!-- Save and Cancel Dilog-->
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      pRipple
-      label="Cancel"
-      icon="pi pi-times"
-      class="p-button-text"
-      (click)="hideDialog()"
-    ></button>
-    <button
-      pButton
-      pRipple
-      label="Send"
-      icon="pi pi-check"
-      class="p-button-text"
-      (click)="onSaveChangePassword()"
-    ></button>
-  </ng-template>
+  <form [formGroup]="changePasswordForm" (ngSubmit)="onPasswordSubmit()">
+    <div class="p-field">
+      <label for="password">Password</label>
+      <input
+        pInputText
+        type="password"
+        id="password"
+        formControlName="password"
+      />
+    </div>
+    <span
+      class="help-block"
+      *ngIf="
+        !changePasswordForm.get('password').valid &&
+        changePasswordForm.get('password').touched
+      "
+    >
+      Please Enter Strong Password
+    </span>
+    <div class="p-field">
+      <label for="passwordConfirm">Password Confirm</label>
+      <input
+        type="password"
+        id="passwordConfirm"
+        formControlName="passwordConfirm"
+        pInputText
+      />
+    </div>
+    <span
+      class="help-block"
+      *ngIf="
+        changePasswordForm.get('passwordConfirm').value !=
+          changePasswordForm.get('password').value &&
+        changePasswordForm.get('passwordConfirm').touched
+      "
+    >
+      Not Equal Password
+    </span>
+
+    <!-- Save and Cancel Dilog-->
+    <div class="password-buttons-wrapper">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text-password"
+        (click)="hideChangePasswordDialog()"
+      ></button>
+
+      <button
+        type="submit"
+        pButton
+        pRipple
+        label="Send"
+        icon="pi pi-check"
+        class="p-button-text-password"
+        (click)="onSaveChangePassword()"
+        *ngIf="
+          changePasswordForm.get('password').dirty &&
+            changePasswordForm.get('passwordConfirm').value ==
+              changePasswordForm.get('password').value;
+          else sendTemplate
+        "
+      ></button>
+      <ng-template #sendTemplate>
+        <button
+          style="
+            color: #ffffff;
+            background: #b8dcf8;
+            border: 1px solid #b8dcf8;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+              box-shadow 0.2s;
+            border-radius: 3px;
+          "
+          icon="pi pi-check"
+          class="p-button-text-password"
+          [disabled]="true"
+        >
+          Save
+        </button></ng-template
+      >
+    </div>
+  </form>
 </p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

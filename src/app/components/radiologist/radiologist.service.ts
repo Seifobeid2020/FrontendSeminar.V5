@@ -83,7 +83,6 @@ export class RadiologistService {
         items: [],
       };
       usersArr.forEach((user) => {
-        console.log(user);
         if (user.city == city) {
           userLabel.items.push({
             label: user.displayName,
@@ -99,11 +98,9 @@ export class RadiologistService {
   //send treatment to doctor
   async sendToDoctor(id, tretment, patient: Patient) {
     const userDetails = await this.auth.currentUser.then((user) => {
-      console.log('user deatals: ', user);
       return user;
     });
 
-    console.log(tretment);
     await this.afs
       .collection('users')
       .doc(userDetails.uid)
@@ -177,8 +174,6 @@ export class RadiologistService {
       });
   }
   deleteExpenseType(id: number) {
-    console.log(id);
-
     this.http.delete(this.gatewayBaseUrl + `ExpenseTypes/${id}`).subscribe();
   }
   craeteExpenseType(expenseType: ExpenseType): void {
@@ -199,7 +194,6 @@ export class RadiologistService {
 
   //Expense  Service
   editExpense(id: number, expense: Expense) {
-    console.log('from service ', expense);
     this.http
       .put<Expense>(this.gatewayBaseUrl + `Expenses/${id}`, expense)
       .subscribe((result) => {
@@ -210,12 +204,10 @@ export class RadiologistService {
     this.http.delete(this.gatewayBaseUrl + `Expenses/${id}`).subscribe();
   }
   craeteExpense(expense: Expense): void {
-    console.log(expense);
     this.http
       .post<Expense>(this.gatewayBaseUrl + 'Expenses', expense)
       .subscribe((result) => {
         this.expenseChanged.next(result);
-        console.log('this is result: ', result);
       });
   }
   getExpenses(): Promise<Expense[]> {
@@ -223,7 +215,6 @@ export class RadiologistService {
       .get<Expense[]>(this.gatewayBaseUrl + 'Expenses')
       .toPromise()
       .then((data) => {
-        console.log('this is data from Expenses:', data);
         return data;
       });
   }

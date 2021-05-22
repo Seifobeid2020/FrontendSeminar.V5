@@ -94,7 +94,11 @@
         </div>
       </div>
       <img
-        src="/assets/images/default-user-image.png"
+        [src]="
+          userData.photoURL
+            ? userData.photoURL
+            : '/assets/images/default-user-image.png'
+        "
         alt="profile image"
         (click)="onClickUserProfile()"
         class="profile-image"
@@ -122,8 +126,8 @@
       <div class="p-col-3">
         <img
           [src]="
-            userData.imageUrl
-              ? userData.imageUrl
+            userData.photoURL
+              ? userData.photoURL
               : '/assets/images/default-user-image.png'
           "
           [alt]="userData.displayName"

@@ -1,5 +1,5 @@
 import { RadiologistService } from './../../radiologist.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { PatientService } from './../patient.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,8 +12,11 @@ import { FileUpload } from './shared/file-upload.model';
 import { FileUploadService } from './shared/file-upload.service';
 import { MessagePatient } from 'src/app/components/dentist/shared/message-patient.model';
 import { MessagePatientService } from 'src/app/components/dentist/message-patient/message-patient.service';
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { AuthService } from 'src/app/components/auth.service';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @Component({
   selector: 'app-patient-details',
@@ -28,11 +31,11 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private uploadService: FileUploadService,
-    private router: Router,
-    private location: Location
+    private db: AngularFireDatabase,
+    private location: Location,
+    private authService: AuthService,
+    private storage: AngularFireStorage
   ) {}
-
-  fileName = '';
 
   sub: Subscription;
 
@@ -60,16 +63,24 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
 
   groupedDoctors;
 
+  userData;
   //send items
   sendToDoctorDialog = false;
   selectedDoctor: string;
+  //image upload
+  selectedFiles?: FileList;
+  currentFileUpload?: FileUpload;
+  percentage = 0;
+  fileName = '';
+  uploadProgress$: Observable<number>;
+  private basePath = '/profileImages';
 
   ngOnInit(): void {
+    this.userData = this.authService.getUser();
     this.id = this.route.snapshot.params.id;
     this.patientService
       .getPatient(this.id)
       .then((data) => {
-        console.log('this is data from details:', data);
         this.patientDetails = data;
       })
       .catch((e) => {
@@ -126,8 +137,6 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
 
     this.radiologistService.getAllDoctors().then((data) => {
       this.groupedDoctors = data;
-
-      console.log(data);
     });
   }
 
@@ -135,6 +144,9 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
     this.treatment = { userId: '', treatmentCost: 0 };
     this.submitted = false;
     this.treatmentDialog = true;
+    //check
+    this.selectedFiles = null;
+    this.fileName = null;
   }
 
   deleteTreatment(treatment: Treatment) {
@@ -186,60 +198,150 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
     this.isEditMode = false;
     this.sendToDoctorDialog = false;
   }
+  async saveImageTreatment() {
+    // let fileUpload: any = this.selectedFiles.item(0);
+    // const filePath = `${this.basePath}/${this.userData.uid}/${fileUpload.name}`;
+    // const uploadTask = this.storage.upload(filePath, fileUpload);
+    // const fileRef = this.storage.ref(filePath);
+    // this.uploadProgress$ = uploadTask.percentageChanges();
+    // uploadTask.snapshotChanges().pipe(
+    //   finalize(() => {
+    //     fileRef.getDownloadURL().subscribe((url) => {
+    //       let treatment: Treatment = {
+    //         treatmentId: this.treatment.treatmentId,
+    //         userId: '',
+    //         patientId: this.id,
+    //         treatmentImageUrl: url,
+    //         treatmentImageName: fileUpload.name, // ask seif about it!!!
+    //         treatmentCost: this.selectedTreatmentType.defaultCost,
+    //         treatmentTypeId: this.selectedTreatmentType.treatmentTypeId,
+    //         createdAt: this.treatment.createdAt,
+    //       };
+    //       this.patientService.editTreatment(
+    //         this.treatment.treatmentId,
+    //         treatment
+    //       );
+    //     });
+    //   })
+    // );
+  }
   async saveTreatment() {
     this.submitted = true;
+    console.log('this is isEditMode:', this.isEditMode);
     // if edite
     if (this.isEditMode) {
-      await this.upload().then((fileUpload) => {
-        let treatment: Treatment = {
-          treatmentId: this.treatment.treatmentId,
-          userId: '',
-          patientId: this.id,
-          treatmentImageUrl: fileUpload.url,
-          treatmentImageName: fileUpload.name, // ask seif about it!!!
-          treatmentCost: this.selectedTreatmentType.defaultCost,
-          treatmentTypeId: this.selectedTreatmentType.treatmentTypeId,
-          createdAt: this.treatment.createdAt,
-        };
+      // await this.upload().then((fileUpload) => {
+      //   let treatment: Treatment = {
+      //     treatmentId: this.treatment.treatmentId,
+      //     userId: '',
+      //     patientId: this.id,
+      //     treatmentImageUrl: fileUpload.url,
+      //     treatmentImageName: fileUpload.name, // ask seif about it!!!
+      //     treatmentCost: this.selectedTreatmentType.defaultCost,
+      //     treatmentTypeId: this.selectedTreatmentType.treatmentTypeId,
+      //     createdAt: this.treatment.createdAt,
+      //   };
 
-        this.patientService.editTreatment(
-          this.treatment.treatmentId,
-          treatment
-        );
-      });
+      //   this.patientService.editTreatment(
+      //     this.treatment.treatmentId,
+      //     treatment
+      //   );
 
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Patient Updated',
-        life: 1500,
-      });
+      // });
+      let fileUpload: any = this.selectedFiles.item(0);
+      const filePath = `${this.basePath}/${this.userData.uid}/${fileUpload.name}`;
+      const uploadTask = this.storage.upload(filePath, fileUpload);
+      const fileRef = this.storage.ref(filePath);
+      this.uploadProgress$ = uploadTask.percentageChanges();
+
+      uploadTask
+        .snapshotChanges()
+        .pipe(
+          finalize(() => {
+            console.log('tests?');
+            fileRef.getDownloadURL().subscribe((url) => {
+              let treatment: Treatment = {
+                treatmentId: this.treatment.treatmentId,
+                userId: '',
+                patientId: this.id,
+                treatmentImageUrl: url,
+                treatmentImageName: fileUpload.name, // ask seif about it!!!
+                treatmentCost: this.selectedTreatmentType.defaultCost,
+                treatmentTypeId: this.selectedTreatmentType.treatmentTypeId,
+                createdAt: this.treatment.createdAt,
+              };
+
+              this.patientService.editTreatment(
+                this.treatment.treatmentId,
+                treatment
+              );
+              this.isEditMode = false;
+              this.treatmentDialog = false;
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Patient Updated',
+                life: 1500,
+              });
+            });
+          })
+        )
+        .subscribe();
     }
     // if add
     else {
-      await this.upload().then((fileUpload) => {
-        let newTreatment: Treatment = {
-          userId: '',
-          patientId: this.id,
-          treatmentImageUrl: fileUpload.url,
-          treatmentImageName: fileUpload.name, // ask seif about it!!!
-          treatmentCost: this.selectedTreatmentType.defaultCost,
-          treatmentTypeId: this.selectedTreatmentType.treatmentTypeId,
-        };
-        console.log('this is alll: ' + newTreatment);
-        this.patientService.craeteTreatment(newTreatment);
-      });
+      //  await this.upload().then((fileUpload) => {
+      // let newTreatment: Treatment = {
+      //   userId: '',
+      //   patientId: this.id,
+      //   treatmentImageUrl: fileUpload.url,
+      //   treatmentImageName: fileUpload.name, // ask seif about it!!!
+      //   treatmentCost: this.selectedTreatmentType.defaultCost,
+      //   treatmentTypeId: this.selectedTreatmentType.treatmentTypeId,
+      // };
+      // console.log('this is alll: ' + newTreatment);
+      // this.patientService.craeteTreatment(newTreatment);
 
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Patient Created',
-        life: 1500,
-      });
+      //   });
+      let fileUpload: any = this.selectedFiles.item(0);
+      const filePath = `${this.basePath}/${this.userData.uid}/${fileUpload.name}`;
+      const uploadTask = this.storage.upload(filePath, fileUpload);
+      const fileRef = this.storage.ref(filePath);
+      this.uploadProgress$ = uploadTask.percentageChanges();
+      console.log('this is return fileUpload ', fileUpload);
+
+      uploadTask
+        .snapshotChanges()
+        .pipe(
+          finalize(() => {
+            fileRef.getDownloadURL().subscribe((url) => {
+              console.log('this is return url ', url);
+              let newTreatment: Treatment = {
+                userId: '',
+                patientId: this.id,
+                treatmentImageUrl: url,
+                treatmentImageName: fileUpload.name, // ask seif about it!!!
+                treatmentCost: this.selectedTreatmentType.defaultCost,
+                treatmentTypeId: this.selectedTreatmentType.treatmentTypeId,
+              };
+
+              this.patientService.craeteTreatment(newTreatment);
+              this.db
+                .list(this.basePath + '/' + fileUpload.id)
+                .push(fileUpload);
+              this.isEditMode = false;
+              this.treatmentDialog = false;
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Patient Created',
+                life: 1500,
+              });
+            });
+          })
+        )
+        .subscribe();
     }
-
-    this.isEditMode = false;
-    this.treatmentDialog = false;
 
     // } end of first if
   }
@@ -259,9 +361,6 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
   }
 
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Upload Image %%%%%%%%%%%%%%%%%%%%%%%%%%%
-  selectedFiles?: FileList;
-  currentFileUpload?: FileUpload;
-  percentage = 0;
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
@@ -274,7 +373,7 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
       if (file) {
         this.currentFileUpload = new FileUpload(file);
         this.currentFileUpload.id = this.id;
-        console.log('this is file upload :', this.currentFileUpload);
+
         return await this.uploadService.pushFileToStorage(
           this.currentFileUpload
         );
@@ -315,8 +414,6 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
       this.treatment,
       this.patientDetails
     );
-
-    console.log(this.selectedDoctor);
 
     this.messageService.add({
       severity: 'success',
