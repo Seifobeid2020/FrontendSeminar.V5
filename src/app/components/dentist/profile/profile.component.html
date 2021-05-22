@@ -1,0 +1,269 @@
+<p-toast></p-toast>
+
+<div class="profile-wrapper">
+  <div class="p-grid">
+    <div class="p-col-4 p-offset-5">
+      <img
+        [src]="
+          userData.imageUrl
+            ? userData.imageUrl
+            : '/assets/images/default-user-image.png'
+        "
+        alt=""
+        class="user-image"
+      />
+
+      <button
+        pButton
+        pRipple
+        icon="pi pi-pencil"
+        class="p-button-rounded p-mr-2 edit-user-image"
+        (click)="onClickOpenEditUserPhoto()"
+      ></button>
+    </div>
+  </div>
+  <div class="line-divider"></div>
+  <div class="p-grid profile-content-wrapper">
+    <div class="p-col-3">
+      <i class="pi pi-chevron-right"></i>
+      <span class="user-details-header"> User Details </span>
+    </div>
+    <div class="p-col-8">
+      <div class="p-grid">
+        <div class="p-col">
+          <label for="displayName">User Name</label>
+          <input
+            type="text"
+            pInputText
+            id="displayName"
+            value=""
+            [(ngModel)]="userData.displayName"
+            required
+            autofocus
+            [disabled]="!isEditMode"
+          />
+        </div>
+        <div class="p-col">
+          <label for="email">User Email</label>
+          <input
+            type="text"
+            pInputText
+            id="email"
+            value=""
+            [(ngModel)]="userData.email"
+            required
+            autofocus
+            [disabled]="!isEditMode"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="p-col-8 p-offset-3">
+      <div class="p-grid">
+        <div class="p-col">
+          <label for="phoneNumber"> Phone Number</label>
+
+          <input
+            type="text"
+            pInputText
+            id="phoneNumber"
+            value=""
+            [(ngModel)]="userData.phoneNumber"
+            required
+            autofocus
+            [disabled]="!isEditMode"
+          />
+        </div>
+        <div class="p-col">
+          <label for="city">City</label>
+          <input
+            type="text"
+            pInputText
+            id="city"
+            value=""
+            [(ngModel)]="userData.city"
+            required
+            autofocus
+            [disabled]="!isEditMode"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="p-col-2 p-offset-7">
+      <div class="p-grid">
+        <div class="p-col" *ngIf="!isEditMode">
+          <button
+            pButton
+            pRipple
+            label="Edit"
+            icon="pi pi-pencil"
+            class="change-password-button"
+            (click)="onClickEditUserDetails()"
+          ></button>
+        </div>
+        <div class="p-col" *ngIf="isEditMode">
+          <button
+            pButton
+            pRipple
+            label="Save"
+            icon="pi pi-pencil"
+            class="save-user-details"
+            (click)="onClickSaveChanges()"
+          ></button>
+          <button
+            pButton
+            pRipple
+            label="Cancel"
+            icon="pi pi-pencil"
+            class="cancle-user-details"
+            (click)="onClickCancelEdit()"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="line-divider"></div>
+
+  <div class="p-grid profile-content-wrapper">
+    <div class="p-col-3">
+      <i class="pi pi-chevron-right"></i>
+      <span class="user-details-header"> Password </span>
+    </div>
+    <div class="p-col-3">
+      <button
+        pButton
+        pRipple
+        label="Change Your Password"
+        icon="pi pi-pencil"
+        class="change-password-button"
+        (click)="onClickChangePassword()"
+      ></button>
+    </div>
+  </div>
+</div>
+
+<!--
+  Dialog
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+-->
+
+<p-dialog
+  [(visible)]="editUserPhotoDialog"
+  [style]="{ width: '450px' }"
+  header="Patient Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field image-edit-wrapper">
+      <img
+        id="imageUrl"
+        [src]="
+          userData.imageUrl
+            ? userData.imageUrl
+            : '/assets/images/default-user-image.png'
+        "
+        alt=""
+        class="user-image-dialog"
+      />
+    </div>
+
+    <div class="p-field">
+      <input
+        style="display: none"
+        type="file"
+        class="text-nowrap text-truncate"
+        (change)="selectFile($event)"
+        #fileInput
+      />
+      <p-button
+        label="Upload Image"
+        icon="pi pi-upload"
+        styleClass="p-button-success"
+        (click)="fileInput.click()"
+      ></p-button>
+      {{ fileName ? fileName : "" }}
+    </div>
+  </ng-template>
+
+  <!-- Save and Cancel Dilog-->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveTreatment()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<!--
+  Dialog Change Password
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+-->
+
+<p-dialog
+  [(visible)]="changePasswordDialog"
+  [style]="{ width: '550px' }"
+  header="Change Password"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <div class="p-field">
+    <label for="password">Password</label>
+    <input type="text" pInputText id="password" value="" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="passwordConform">Password Conform</label>
+    <input
+      type="text"
+      pInputText
+      id="passwordConform"
+      value=""
+      required
+      autofocus
+    />
+  </div>
+  <!-- Save and Cancel Dilog-->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Send"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSaveChangePassword()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

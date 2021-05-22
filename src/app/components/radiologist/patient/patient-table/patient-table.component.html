@@ -1,0 +1,297 @@
+<p-toast></p-toast>
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <!-- Delete and Add all Buttons -->
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="New"
+        icon="pi pi-plus"
+        class="p-button-success p-mr-2"
+        (click)="openNew()"
+      ></button>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <!-- <p-fileUpload
+        mode="basic"
+        accept="image/*"
+        [maxFileSize]="1000000"
+        label="Import"
+        chooseLabel="Import"
+        class="p-mr-2 p-d-inline-block"
+      ></p-fileUpload> -->
+      <button
+        pButton
+        pRipple
+        label="XSL"
+        icon="pi pi-download"
+        class="p-button-help"
+        (click)="exportExcel()"
+        class="p-button-success p-mr-2"
+        pTooltip="XLS"
+        tooltipPosition="bottom"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="patients"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['firstName', 'lastName', 'phoneNumber', 'createdAt']"
+    [(selection)]="selectedPatients"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    sortMode="multiple"
+  >
+    <!-- ############################
+  #################Caption /search##############
+
+  -->
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-text-bold">Patients</h5>
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            #i
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search..."
+          />
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- ############################
+  ################# table header ##############
+
+  -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="firstName">
+          First Name <p-sortIcon field="firstName"></p-sortIcon>
+        </th>
+        <th pSortableColumn="lastName">
+          Last Name <p-sortIcon field="lastName"></p-sortIcon>
+        </th>
+        <th pSortableColumn="phoneNumber">
+          Phone Number <p-sortIcon field="phoneNumber"></p-sortIcon>
+        </th>
+        <th pSortableColumn="age">Age <p-sortIcon field="age"></p-sortIcon></th>
+        <th pSortableColumn="gender">
+          Gender <p-sortIcon field="gender"></p-sortIcon>
+        </th>
+        <th pSortableColumn="createdAt">
+          Date <p-sortIcon field="createdAt"></p-sortIcon>
+        </th>
+        <th pSortableColumn="totalTreatmentCost">
+          Total Cost <p-sortIcon field="totalTreatmentCost"></p-sortIcon>
+        </th>
+
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <!-- ############################
+  ################# Tables body ##############
+  -->
+    <ng-template pTemplate="body" let-patient>
+      <tr>
+        <td>{{ patient.firstName }}</td>
+
+        <td>{{ patient.lastName }}</td>
+        <td>{{ patient.phoneNumber }}</td>
+        <td>{{ patient.age }}</td>
+        <td>{{ patient.gender == 1 ? "Male" : "Female" }}</td>
+        <td>{{ patient.createdAt | date: "yyyy-MM-dd" }}</td>
+        <td>
+          {{ patient.totalTreatmentCost | currency: "USD" }}
+        </td>
+
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-search-plus"
+            class="p-button-rounded p-button-prime p-mr-2"
+            [routerLink]="['/radiologist/patients', patient.patientId]"
+          ></button>
+          <!-- [routerLink]="['/recipes', id, 'edit']" -->
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success p-mr-2"
+            (click)="editPatient(patient)"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            (click)="deletePatient(patient)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ patients ? patients.length : 0 }} patients.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<!--
+
+  Dilog
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+-->
+
+<p-dialog
+  [(visible)]="patientDialog"
+  [style]="{ width: '450px' }"
+  header="Patient Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <!--  the content of the dilog form-->
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="firstName">First Name</label>
+      <input
+        type="text"
+        pInputText
+        id="firstName"
+        [(ngModel)]="patient.firstName"
+        value=""
+        required
+        autofocus
+      />
+      <small class="p-invalid" *ngIf="submitted && !patient.firstName"
+        >first Name is required.</small
+      >
+    </div>
+    <div class="p-field">
+      <label for="lastName">last Name</label>
+      <input
+        type="text"
+        pInputText
+        id="lastName"
+        [(ngModel)]="patient.lastName"
+        required
+        autofocus
+      />
+      <small class="p-invalid" *ngIf="submitted && !patient.lastName"
+        >last Name is required.</small
+      >
+    </div>
+    <div class="p-field">
+      <label for="phoneNumber">phone Number</label>
+      <input
+        type="text"
+        pInputText
+        id="phoneNumber"
+        [(ngModel)]="patient.phoneNumber"
+        required
+        autofocus
+      />
+      <small class="p-invalid" *ngIf="submitted && !patient.phoneNumber"
+        >phone Number is required.</small
+      >
+    </div>
+    <div class="p-field">
+      <label for="age">age</label>
+      <input
+        type="number"
+        pInputText
+        id="age"
+        [(ngModel)]="patient.age"
+        required
+        autofocus
+      />
+      <small class="p-invalid" *ngIf="submitted && !patient.age"
+        >age is required.</small
+      >
+    </div>
+    <div class="p-field">
+      <label for="gender">Gender</label>
+      <p-selectButton
+        [options]="stateGenderOptions"
+        [(ngModel)]="selectedgenderValue"
+        optionLabel="label"
+        optionValue="value"
+      ></p-selectButton>
+    </div>
+
+    <div class="p-field" *ngIf="!isEditMode">
+      <label for="typeOfXRay">Type Of X-Ray</label>
+      <p-dropdown
+        [options]="treatmentTypes"
+        [(ngModel)]="selectedTreatmentType.name"
+        placeholder="Select a Type"
+        optionLabel="name"
+        optionValue="name"
+        [showClear]="true"
+        [disabled]="isEditMode"
+        (onChange)="onChangeTreatmentType()"
+      ></p-dropdown>
+
+      <small
+        class="p-invalid"
+        *ngIf="submitted && !selectedTreatmentType.name && !isEditMode"
+        >type Of X-Ray is required.</small
+      >
+    </div>
+
+    <div class="p-formgrid p-grid" *ngIf="!isEditMode">
+      <div class="p-field p-col">
+        <label for="cost">Cost</label>
+        <p-inputNumber
+          id="cost"
+          [(ngModel)]="selectedTreatmentType.defaultCost"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          value="selectedTreatmentType.cost"
+          [disabled]="isEditMode"
+        ></p-inputNumber>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Save and Cancel Dilog-->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="savePatient()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

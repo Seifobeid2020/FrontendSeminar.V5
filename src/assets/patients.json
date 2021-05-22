@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": "1000",
+      "code": "string",
+      "firstName": "Bamboo",
+      "lastName": "Watch",
+      "age": 19,
+      "gender": "Male",
+      "phoneNumber": "0592555642",
+      "cost": 65,
+      "typeOfXRay": { "name": "Panorama" },
+      "date": "2020-02-09",
+      "image": "https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg"
+    }
+  ],
+  "typeOfXRayUser": [{ "name": "Panorama" }, { "name": "CM" }]
+}

@@ -1,0 +1,17 @@
+.patient-wrapper {
+  margin: 0 1em;
+
+  margin-top: 20px;
+
+  position: relative;
+
+  background: #f1f1f1;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  color: #636363;
+  letter-spacing: 1px;
+
+  box-shadow: 0 0 4px #767676, rgba(17, 17, 26, 0.1) 0px 8px 24px,
+    rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
+  border-radius: 10px;
+}

@@ -1,0 +1,104 @@
+<div class="p-grid p-ai-center p-ml-2" *ngIf="messagePatientDetails">
+  <div class="p-col-12 p-sm-12 p-lg-12 p-xl-8">
+    <div class="p-grid p-jc-between">
+      <div class="p-col-4 p-as-center">
+        <img
+          [src]="messagePatientDetails.imageUrl"
+          [alt]="messagePatientDetails.imageUrl"
+          width="300"
+          (click)="showLightbox(0)"
+          class="image-wrapper"
+        />
+      </div>
+      <ng-image-fullscreen-view
+        [images]="imageObject"
+        [show]="showFlag"
+        (close)="closeEventHandler()"
+      ></ng-image-fullscreen-view>
+
+      <div class="p-col-12 p-sm-12 p-lg-12 p-xl-4 p-as-center">
+        <div class="p-grid">
+          <div class="p-col-8 p-offset-3">
+            <div class="box">
+              <button
+                pButton
+                pRipple
+                label=" Send to AI"
+                class="p-button-success p-mr-2"
+                (click)="sendToAIConverter()"
+              >
+                <fa-icon [icon]="faRobot" style="padding-right: 5px"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-4 p-as-center spinner-wrapper">
+        <div class="p-grid">
+          <div class="p-col-6 p-offset-3">
+            <div class="box">
+              <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+            </div>
+          </div>
+        </div>
+        <img
+          *ngIf="imageAIUrl && imageAIReceived"
+          src="{{ imageAIUrl }}"
+          alt="A image"
+          width="300"
+          #myImg
+          class="image-wrapper"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="p-col-12 p-sm-12 p-lg-12 p-xl-4">
+    <p-fieldset legend="About">
+      <div class="p-d-flex p-flex-column">
+        <div class="p-mb-1">
+          <div class="about-header">Patient Name</div>
+          {{ messagePatientDetails.patientName }}
+        </div>
+        <div class="p-mb-1">
+          <div class="about-header">Image Type</div>
+          {{ messagePatientDetails.imageType }}
+        </div>
+
+        <div class="p-mb-1">
+          <div class="about-header">Patient Phone Number</div>
+          {{ messagePatientDetails.patientPhoneNumber }}
+        </div>
+
+        <div class="p-mb-1">
+          <div class="about-header">Sent At</div>
+          {{ messagePatientDetails.sentAt.toDate() | date: "MMM d, y, h:mm a" }}
+        </div>
+        <div class="p-mb-1">
+          <div class="about-header">Patient Age</div>
+          {{ messagePatientDetails.patientAge }}
+        </div>
+        <div class="p-mb-1">
+          <div class="about-header">Patient Gender</div>
+          {{ messagePatientDetails.patientGender }}
+        </div>
+        <div class="p-mb-1">
+          <div class="about-header">Sender Name</div>
+          {{
+            messagePatientDetails.senderName
+              ? messagePatientDetails.senderName
+              : "UnKnown"
+          }}
+        </div>
+        <div class="p-mb-3">
+          <div class="about-header">Sender Phone Number</div>
+
+          {{
+            messagePatientDetails.senderPhoneNumber
+              ? messagePatientDetails.senderPhoneNumber
+              : "UnKnown"
+          }}
+        </div>
+      </div>
+    </p-fieldset>
+  </div>
+</div>

@@ -1,0 +1,191 @@
+<p-menubar [model]="itemsNav" styleClass="menubar">
+  <ng-template pTemplate="end">
+    <div style="display: inline">
+      <a
+        class="pi pi-bell p-mr-4 p-text-secondary noti-a-tag"
+        style="font-size: 2rem"
+        (click)="onClickNotiction($event)"
+        id="notifiction"
+        [ngClass]="{ 'noti-a-tag-clicked': showBox }"
+      >
+        <p-badge
+          class="pi noti-p-badge"
+          styleClass="p-mr-2"
+          value="{{ numOfNotifictions }}"
+          severity="danger"
+          [ngClass]="{ 'show-badge': numOfNotifictions != 0 && !showBox }"
+          *ngIf="numOfNotifictions != 0 && !showBox"
+        >
+        </p-badge>
+      </a>
+
+      <!-- value="{{ messagesArray?.length }}" -->
+      <div
+        class="dropdown-menu"
+        (clickOutside)="onClickedOutside($event)"
+        *ngIf="showBox"
+      >
+        <div class="notification-continare">
+          <h3>Earlier Notifications</h3>
+          <ul class="ul-main">
+            <div *ngFor="let message of messagesArray; index as i">
+              <li
+                *ngIf="i < 6"
+                class="message-item"
+                (click)="onMessagePatientNotifictionClick(message)"
+              >
+                <div class="p-grid">
+                  <div class="p-col-2">
+                    <img
+                      [src]="
+                        message.senderImage
+                          ? message.senderImage
+                          : '/assets/images/default-user-image.png'
+                      "
+                      [alt]="message.senderName"
+                      style="
+                        height: 56px;
+                        width: 56px;
+                        border-radius: 50%;
+                        margin: 5px;
+                        padding: 5px;
+                      "
+                    />
+                  </div>
+                  <div class="p-col-9">
+                    <span>
+                      <b>
+                        {{
+                          message.senderName ? message.senderName : "UnKnown"
+                        }}</b
+                      >
+                    </span>
+                    Send to you a New Patient
+                    <span
+                      ><b> {{ message.patientName }}. </b>
+                    </span>
+                    <br />
+                    <span
+                      class="date-time"
+                      [ngStyle]="{
+                        color: !message.seen ? '#2e89ff' : '#303338'
+                      }"
+                    >
+                      {{
+                        message.sentAt.toDate() | date: "MMM d, y, h:mm a"
+                      }}</span
+                    >
+                  </div>
+                  <div class="p-col-1 center-circle" *ngIf="!message.seen">
+                    <div class="seen-circle"></div>
+                  </div>
+                </div>
+              </li>
+            </div>
+          </ul>
+          <div class="see-all-contianer">
+            <a
+              class="see-all"
+              [routerLink]="['patients']"
+              (click)="seeAllHide()"
+              >See All Notifications</a
+            >
+          </div>
+        </div>
+      </div>
+      <img
+        src="/assets/images/default-user-image.png"
+        alt="profile image"
+        (click)="onClickUserProfile()"
+        class="profile-image"
+        id="accountSettings"
+        [ngStyle]="{
+          border: showAccountSettings
+            ? '3px solid rgba(38, 38, 38, 0.898)'
+            : 'none'
+        }"
+      />
+    </div>
+  </ng-template>
+</p-menubar>
+<div
+  class="dropdown-menu-profile-account"
+  (clickOutside)="onClickedOutsideProfile($event)"
+  *ngIf="showAccountSettings"
+>
+  <div
+    class="user-details"
+    (click)="onClickUserProfile()"
+    [routerLink]="['/dentist/profile']"
+  >
+    <div class="p-grid">
+      <div class="p-col-3">
+        <img
+          [src]="
+            userData.imageUrl
+              ? userData.imageUrl
+              : '/assets/images/default-user-image.png'
+          "
+          [alt]="userData.displayName"
+          class="avatar"
+        />
+      </div>
+      <div class="p-col-9 media-body">
+        <span>
+          <b> {{ userData.displayName }}</b>
+        </span>
+        <br />
+        <span> {{ userData.email }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="line-divider"></div>
+  <div class="list-settings">
+    <div
+      class="dropdown-item"
+      (click)="onClickUserProfile()"
+      [routerLink]="['/dentist/profile']"
+    >
+      <i class="pi pi-user icon-item"></i> Profile
+    </div>
+    <div class="dropdown-item" (click)="onClickUserAccount()">
+      <i class="pi pi-credit-card icon-item"></i> Account
+    </div>
+
+    <div class="dropdown-item" (click)="logout()">
+      <i class="pi pi-power-off icon-item"></i> Logout
+    </div>
+  </div>
+</div>
+
+<!-- <div class="sidenav">
+  <p-panelMenu
+    [model]="itemsSideNav"
+    [style]="{ width: '100%', height: '100%' }"
+  ></p-panelMenu>
+</div> -->
+
+<div class="sidenav-wrapper">
+  <div class="logo-wrapper">
+    <img class="logo-image" src="/assets/logoLast_2.png" alt="not found" />
+  </div>
+
+  <div class="sidenav">
+    <p-panelMenu [model]="itemsSideNav"></p-panelMenu>
+  </div>
+</div>
+
+<!--
+<div class="main">
+  <div class="p-shadow-5 container">
+    <router-outlet></router-outlet>
+  </div>
+</div> -->
+
+<div class="content-wrapper">
+  <!-- <div class="p-shadow-5 container"> -->
+  <div class="container-fluid">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+.sendButton:hover {
+  transition-duration: 1s;
+  background-color: transparent;
+  color: #e08e57 !important;
+  /* border: 1px solid #e06f4d !important; */
+  background-color: #3f3c3cf6 !important;
+}
+/* .sendButton {
+  transition-duration: 1s;
+  margin-left: 15%;
+  background-color: #b2b2b3;
+  border: 1px solid #b2b2b3;
+} */

@@ -1,0 +1,151 @@
+<div class="p-shadow-5 container">
+  <p-toast></p-toast>
+
+  <div class="card">
+    <p-toolbar styleClass="p-mb-4">
+      <!-- Delete and Add all Buttons -->
+      <ng-template pTemplate="left">
+        <button
+          pButton
+          pRipple
+          label="New"
+          icon="pi pi-plus"
+          class="p-button-success p-mr-2"
+          (click)="openNew()"
+        ></button>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table
+      #dt
+      [value]="expenseTypes"
+      [rows]="10"
+      [paginator]="true"
+      [globalFilterFields]="['expenseTypeName']"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <!-- ############################
+  #################Caption /search##############
+  -->
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <h5 class="p-text-bold">Expense Types</h5>
+
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search..."
+            />
+          </span>
+        </div>
+      </ng-template>
+
+      <!-- ############################
+  ################# table header ##############
+  -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="expenseTypeName">
+            expense Type Name <p-sortIcon field="expenseTypeName"></p-sortIcon>
+          </th>
+
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <!-- ############################
+  ################# Tables body ##############
+  -->
+      <ng-template pTemplate="body" let-expenseType>
+        <tr>
+          <td>{{ expenseType.expenseTypeName }}</td>
+
+          <td>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success p-mr-2"
+              (click)="editExpenseType(expenseType)"
+            ></button>
+
+            <button
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              (click)="deleteExpenseType(expenseType)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ expenseTypes ? expenseTypes.length : 0 }} Expense Types.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+  <!--
+  Dilog
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+-->
+
+  <p-dialog
+    [(visible)]="expenseTypeDialog"
+    [style]="{ width: '450px' }"
+    header="Expense Type Details"
+    [modal]="true"
+    styleClass="p-fluid"
+  >
+    <ng-template pTemplate="content">
+      <div class="p-field">
+        <label for="name">Expense Type Name</label>
+        <input
+          type="text"
+          pInputText
+          id="name"
+          [(ngModel)]="expenseType.expenseTypeName"
+          value=""
+          required
+          autofocus
+        />
+      </div>
+    </ng-template>
+
+    <!-- Save and Cancel Dilog-->
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-text"
+        (click)="saveExpenseType()"
+      ></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+</div>

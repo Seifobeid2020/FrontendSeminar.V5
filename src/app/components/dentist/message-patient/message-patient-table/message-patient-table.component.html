@@ -1,0 +1,96 @@
+<p-toast></p-toast>
+<div class="card">
+  <p-table
+    #dt
+    [value]="messagePatients"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['firstName', 'lastName']"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    sortMode="multiple"
+  >
+    <!-- ############################
+  #################Caption /search##############
+
+  -->
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h2 class="p-text-bold">Patient Messages</h2>
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            #i
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search..."
+          />
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- ############################
+  ################# table header ##############
+
+  -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="patientName">
+          patient Name <p-sortIcon field="patientName"></p-sortIcon>
+        </th>
+        <th pSortableColumn="patientPhoneNumber">
+          patient Phone <p-sortIcon field="patientPhoneNumber"></p-sortIcon>
+        </th>
+        <th pSortableColumn="imageType">
+          Image Type <p-sortIcon field="imageType"></p-sortIcon>
+        </th>
+        <th pSortableColumn="receiverName">
+          Sender Name <p-sortIcon field="receiverName"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="sentAt">
+          sent At <p-sortIcon field="sentAt"></p-sortIcon>
+        </th>
+
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <!-- ############################
+  ################# Tables body ##############
+  -->
+    <ng-template pTemplate="body" let-messagePatient>
+      <tr>
+        <td>{{ messagePatient.patientName }}</td>
+
+        <td>{{ messagePatient.patientPhoneNumber }}</td>
+        <td>{{ messagePatient.imageType }}</td>
+        <td>{{ messagePatient.senderName }}</td>
+        <td>{{ messagePatient.sentAt.toDate() | date: "yyyy-MM-dd" }}</td>
+
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-search-plus"
+            class="p-button-rounded p-button-prime p-mr-2"
+            [routerLink]="['/dentist/patients', messagePatient.messageId]"
+          ></button>
+          <!-- [routerLink]="['/recipes', id, 'edit']" -->
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are
+        {{ messagePatients ? messagePatients.length : 0 }} patients.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog> -->

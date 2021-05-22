@@ -1,0 +1,151 @@
+<div>
+  <div class="p-grid mt-4">
+    <!-- 11111 -->
+    <div class="p-col-12 p-sm-6 p-lg-6 p-xl-3">
+      <div class="card gradient-scooter">
+        <div class="card-body p-p-4">
+          <div class="media">
+            <div class="media-body text-left">
+              <span class="text-white" style="font-size: 1.7rem">{{
+                totalPatients
+              }}</span>
+              <br />
+              <span class="text-white">Total Patients</span>
+            </div>
+            <div class="align-self-center w-icon">
+              <i
+                class="pi pi-users text-white"
+                style="font-size: 1.7rem; padding-right: 1.5rem"
+              ></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 22222 -->
+    <div class="p-col-12 p-sm-6 p-lg-6 p-xl-3">
+      <div class="card gradient-bloody">
+        <div class="card-body p-p-4">
+          <div class="media">
+            <div class="media-body text-left">
+              <span class="text-white" style="font-size: 1.7rem">{{
+                totalExpanses
+              }}</span>
+              <br />
+              <span class="text-white">Total Expenses</span>
+            </div>
+            <div class="align-self-center w-icon">
+              <i class="pi pi-dollar text-white" style="font-size: 2rem"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 33333 -->
+    <div class="p-col-12 p-sm-6 p-lg-6 p-xl-3">
+      <div class="card gradient-quepal">
+        <div class="card-body p-p-4">
+          <div class="media">
+            <div class="media-body text-left">
+              <span class="text-white" style="font-size: 1.7rem">{{
+                totalIncomes
+              }}</span>
+              <br />
+              <span class="text-white">Total Incomes</span>
+            </div>
+            <div class="align-self-center w-icon">
+              <i
+                class="pi pi-arrow-circle-up text-white"
+                style="font-size: 2rem"
+              ></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 44444 -->
+    <div class="p-col-12 p-sm-6 p-lg-6 p-xl-3">
+      <div class="card gradient-blooker">
+        <div class="card-body p-p-4">
+          <div class="media">
+            <div class="media-body text-left">
+              <span class="text-white" style="font-size: 1.7rem">{{
+                newWeeklyPatientsCount
+              }}</span>
+              <br />
+              <span class="text-white"> Weekly Patients</span>
+            </div>
+            <div class="align-self-center w-icon">
+              <i class="pi pi-user text-white" style="font-size: 2rem"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- last 5 patients table -->
+<div>
+  <div class="p-grid mt-4">
+    <div class="p-col-12 p-lg-12 p-xl-12">
+      <div class="card">
+        <div class="card-header">Last 5 Patients</div>
+        <div class="card-body">
+          <p-table [value]="lastFivePatients">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Phone Number</th>
+                <th>Visit Date</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-patient>
+              <tr>
+                <td>{{ patient.fullName }}</td>
+                <td>{{ patient.age }}</td>
+                <td>{{ patient.gender == 1 ? "Male" : "Female" }}</td>
+                <td>{{ patient.phoneNumber }}</td>
+                <td>{{ patient.createdAt | date: "yyyy-MM-dd" }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- tables with circal-->
+<div>
+  <div class="p-grid mt-4">
+    <div class="p-col-12 p-lg-5 p-xl-6">
+      <div class="card">
+        <div class="card-header">Last 5 Expence</div>
+        <div class="card-body">
+          <p-table [value]="lastFiveExpenses">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Expense Type Name</th>
+                <th>Expense Value</th>
+                <th>Date</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-expense>
+              <tr>
+                <td>{{ expense.expenseTypeName }}</td>
+                <td>{{ expense.expenseValue }}</td>
+                <td>{{ expense.createdAt | date: "yyyy-MM-dd" }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12 p-lg-7 p-xl-6">
+      <div class="card">
+        <p-chart type="doughnut" [data]="data"></p-chart>
+      </div>
+    </div>
+  </div>
+</div>

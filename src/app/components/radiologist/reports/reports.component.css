@@ -1,0 +1,28 @@
+.balancePositive {
+  background: #c8e6c9;
+  color: #256029;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+.balanceNegative {
+  background: #ffcdd2;
+  color: #c63737;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.container {
+  margin: 0 1.5em;
+
+  margin-top: 20px;
+
+  position: relative;
+
+  background: #f1f1f1;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  color: #636363;
+  letter-spacing: 1px;
+}

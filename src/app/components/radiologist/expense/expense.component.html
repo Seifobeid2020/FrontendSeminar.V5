@@ -1,0 +1,249 @@
+<div class="p-shadow-5 container">
+  <p-toast></p-toast>
+
+  <div class="card">
+    <p-toolbar styleClass="p-mb-4">
+      <!-- Delete and Add all Buttons -->
+      <ng-template pTemplate="left">
+        <button
+          pButton
+          pRipple
+          label="New"
+          icon="pi pi-plus"
+          class="p-button-success p-mr-2"
+          (click)="openNew()"
+        ></button>
+      </ng-template>
+
+      <ng-template pTemplate="right">
+        <!-- <p-fileUpload
+        mode="basic"
+        accept="image/*"
+        [maxFileSize]="1000000"
+        label="Import"
+        chooseLabel="Import"
+        class="p-mr-2 p-d-inline-block"
+      ></p-fileUpload> -->
+
+        <!-- <button
+        pButton
+        pRipple
+        label="XSL"
+        icon="pi pi-download"
+        class="p-button-help"
+        (click)="exportExcel()"
+        class="p-button-success p-mr-2"
+        pTooltip="XLS"
+        tooltipPosition="bottom"
+      ></button> -->
+      </ng-template>
+    </p-toolbar>
+
+    <p-table
+      #dt
+      [value]="expenses"
+      [rows]="10"
+      [paginator]="true"
+      [globalFilterFields]="[
+        'expenseTypeName',
+        'expenseValue',
+        'createdAt',
+        'expenseDescription'
+      ]"
+      [(selection)]="selectedExpenses"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+      sortMode="multiple"
+    >
+      <!-- ############################
+  #################Caption /search##############
+
+  -->
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <h5 class="p-text-bold">Expenses</h5>
+
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              #i
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search..."
+            />
+          </span>
+        </div>
+      </ng-template>
+
+      <!-- ############################
+  ################# table header ##############
+
+  -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="expenseTypeName">
+            Expense Type Name <p-sortIcon field="expenseTypeName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="expenseValue">
+            Expense Value <p-sortIcon field="expenseValue"></p-sortIcon>
+          </th>
+
+          <th pSortableColumn="createdAt">
+            Created At <p-sortIcon field="createdAt"></p-sortIcon>
+          </th>
+          <th pSortableColumn="expenseDescription">
+            Expense Description
+            <p-sortIcon field="expenseDescription"></p-sortIcon>
+          </th>
+
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <!-- ############################
+  ################# Tables body ##############
+  -->
+      <ng-template pTemplate="body" let-expense>
+        <tr>
+          <td>{{ expense.expenseType.expenseTypeName }}</td>
+          <td>
+            {{ expense.expenseValue | currency: "USD" }}
+          </td>
+
+          <td>{{ expense.createdAt | date: "yyyy-MM-dd" }}</td>
+          <td>{{ expense.expenseDescription }}</td>
+
+          <td>
+            <!-- <button
+            pButton
+            pRipple
+            icon="pi pi-search-plus"
+            class="p-button-rounded p-button-prime p-mr-2"
+            [routerLink]="['/radiologist/patients', expense]"
+          ></button> -->
+            <!-- [routerLink]="['/recipes', id, 'edit']" -->
+            <button
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success p-mr-2"
+              (click)="editExpense(expense)"
+            ></button>
+
+            <button
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              (click)="deleteExpense(expense)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ expenses ? expenses.length : 0 }} Expenses.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+  <!--
+
+  Dilog
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+-->
+
+  <p-dialog
+    [(visible)]="expenseDialog"
+    [style]="{ width: '450px' }"
+    header="Expense Details"
+    [modal]="true"
+    styleClass="p-fluid"
+  >
+    <!--  the content of the dilog form-->
+    <ng-template pTemplate="content">
+      <div class="p-field">
+        <label for="expenseTypeName">Expense Type Name</label>
+        <p-dropdown
+          [options]="expenseTypes"
+          [(ngModel)]="selectedExpenseTypeNumber"
+          placeholder="Select a Type"
+          optionLabel="expenseTypeName"
+          optionValue="expenseTypeId"
+          [showClear]="true"
+          (onChange)="seeChange($event)"
+        ></p-dropdown>
+
+        <!-- <small
+        class="p-invalid"
+        *ngIf="submitted && !selectedExpenseType.expenseTypeName"
+        >expense Type Name is required.</small
+      > -->
+      </div>
+
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="expenseValue">Expense Value</label>
+          <p-inputNumber
+            id="expenseValue"
+            [(ngModel)]="expense.expenseValue"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            value="expense.expenseValue"
+          ></p-inputNumber>
+          <small class="p-invalid" *ngIf="submitted && !expense.expenseValue"
+            >Expense Value is required.</small
+          >
+        </div>
+      </div>
+
+      <div class="p-field">
+        <label for="expenseDescription">Expense Description</label>
+        <input
+          type="text"
+          pInputText
+          id="expenseDescription"
+          [(ngModel)]="expense.expenseDescription"
+          required
+          autofocus
+        />
+        <small
+          class="p-invalid"
+          *ngIf="submitted && !expense.expenseDescription"
+          >Expense Description is required.</small
+        >
+      </div>
+    </ng-template>
+
+    <!-- Save and Cancel Dilog-->
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-text"
+        (click)="saveExpense()"
+      ></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+</div>

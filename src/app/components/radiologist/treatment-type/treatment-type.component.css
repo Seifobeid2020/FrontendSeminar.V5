@@ -1,0 +1,13 @@
+.container {
+  margin: 0 1.5em;
+
+  margin-top: 20px;
+  padding: 2em;
+  position: relative;
+
+  background: #f1f1f1;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  color: #636363;
+  letter-spacing: 1px;
+}

@@ -1,0 +1,278 @@
+<p-toast></p-toast>
+
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <!-- Delete and Add all Buttons -->
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="New"
+        icon="pi pi-plus"
+        class="p-button-success p-mr-2"
+        (click)="openNew()"
+      ></button>
+    </ng-template>
+
+    <!-- <ng-template pTemplate="right">
+      <p-fileUpload
+        mode="basic"
+        accept="image/*"
+        [maxFileSize]="1000000"
+        label="Import"
+        chooseLabel="Import"
+        class="p-mr-2 p-d-inline-block"
+      ></p-fileUpload>
+    </ng-template> -->
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="treatments"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['treatmetCost']"
+    [(selection)]="selectedTreatments"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+  >
+    <!-- ############################
+  #################Caption /search##############
+  -->
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-text-bold">Treatments</h5>
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search..."
+          />
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- ############################
+  ################# table header ##############
+  -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="imageUrl">
+          Image <p-sortIcon field="imageUrl"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">
+          Treatment Type <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="createdAt">
+          Created At <p-sortIcon field="createdAt"></p-sortIcon>
+        </th>
+        <th pSortableColumn="treatmetCost">
+          Treatmet Cost <p-sortIcon field="treatmetCost"></p-sortIcon>
+        </th>
+
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <!-- ############################
+  ################# Tables body ##############
+  -->
+    <ng-template pTemplate="body" let-treatment>
+      <tr>
+        <td>
+          <a [href]="treatment.treatmentImageUrl">
+            <img
+              [src]="treatment.treatmentImageUrl"
+              [alt]="treatment.treatmentImageName"
+              width="80"
+            />
+          </a>
+        </td>
+
+        <td>{{ treatment.treatmentName }}</td>
+        <td>{{ treatment.createdAt | date: "yyyy-MM-dd" }}</td>
+        <td>{{ treatment.treatmentCost | currency: "USD" }}</td>
+
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-send"
+            class="sendButton p-button-rounded p-button-outlined p-mr-2"
+            (click)="openDialogSendTreatmentToDoctor(treatment)"
+            *ngIf="treatment.treatmentImageUrl"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success p-mr-2"
+            (click)="editTreatment(treatment)"
+            *ngIf="!treatment.treatmentImageUrl"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger p-mr-2"
+            (click)="deleteTreatment(treatment)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ treatments ? treatments.length : 0 }} treatments.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<!--
+  Dilog
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+-->
+
+<p-dialog
+  [(visible)]="treatmentDialog"
+  [style]="{ width: '450px' }"
+  header="Patient Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <div class="p-field" *ngIf="selectedTreatmentType">
+    <label for="typeOfXRay">Type Of X-Ray</label>
+    <p-dropdown
+      [options]="treatmentTypes"
+      [(ngModel)]="selectedTreatmentType.name"
+      placeholder="Select a Type"
+      optionLabel="name"
+      optionValue="name"
+      [showClear]="true"
+      [disabled]="isEditMode"
+      (onChange)="onChangeTreatmentType()"
+    ></p-dropdown>
+  </div>
+
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="treatmetCost">Treatmet Cost</label>
+      <input
+        type="text"
+        pInputText
+        id="treatmetCost"
+        [(ngModel)]="selectedTreatmentType.defaultCost"
+        value=""
+        required
+        autofocus
+        [disabled]="isEditMode"
+      />
+    </div>
+
+    <div class="p-field">
+      <input
+        style="display: none"
+        type="file"
+        class="text-nowrap text-truncate"
+        (change)="selectFile($event)"
+        #fileInput
+      />
+      <p-button
+        label="Upload Image"
+        icon="pi pi-upload"
+        styleClass="p-button-success"
+        (click)="fileInput.click()"
+      ></p-button>
+      {{ fileName ? fileName : "" }}
+    </div>
+  </ng-template>
+
+  <!-- Save and Cancel Dilog-->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveTreatment()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<!--
+  Dialog send to doctor
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+  ####################################################################################################
+-->
+
+<p-dialog
+  [(visible)]="sendToDoctorDialog"
+  [style]="{ width: '550px' }"
+  header="Patient Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <div class="p-field" [style]="{ height: '500px' }">
+    <h5>Doctors</h5>
+    <p-dropdown
+      [options]="groupedDoctors"
+      [(ngModel)]="selectedDoctor"
+      placeholder="Select a City"
+      [filter]="true"
+      [group]="true"
+      [showClear]="true"
+    >
+      <ng-template let-group pTemplate="group">
+        <div class="p-d-flex p-ai-center">
+          <span>{{ group.label }}</span>
+        </div>
+      </ng-template>
+    </p-dropdown>
+  </div>
+  <!-- Save and Cancel Dilog-->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Send"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSendToDoctor()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

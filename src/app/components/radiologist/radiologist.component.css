@@ -1,0 +1,222 @@
+::ng-deep.p-menubar {
+  width: 100% !important;
+  /* position: absolute;
+  top: 0;
+  right: 0; */
+  border: none !important;
+}
+
+.profile-image {
+  height: 50px;
+  width: 50px;
+
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 15px;
+}
+.sidenav-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200vh;
+  background-color: #273e48;
+}
+.sidenav {
+  position: sticky;
+  top: 0;
+  background-color: #273e48;
+  height: 100vh;
+}
+:host >>> .p-panelmenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+::ng-deep.p-panelmenu-header-link,
+::ng-deep.p-toggleable-content,
+::ng-deep.p-panelmenu-content,
+::ng-deep.p-menuitem-link {
+  border: none !important;
+  padding: 13px 5px 13px 15px !important;
+  display: block !important;
+  border-left: 3px solid transparent !important;
+  color: #b8c7ce !important;
+  font-size: 15px !important;
+  border-top: 1px solid #213740 !important;
+  border-bottom: 1px solid #090e10 !important;
+  background-color: #273e48 !important;
+}
+
+::ng-deep.p-panelmenu-header-link:last-of-type {
+  border-bottom: none !important;
+}
+
+::ng-deep.p-panelmenu-content {
+  border: none !important;
+}
+
+::ng-deep.p-menuitem-text {
+  color: #b8c7ce !important;
+  font-size: 15px !important;
+}
+
+::ng-deep.p-menuitem-link {
+  border: 1px solid #090e10 !important;
+  margin: 2px;
+}
+
+::ng-deep.p-panelmenu-header-link:focus,
+::ng-deep.p-panelmenu-header-link:hover,
+::ng-deep.p-panelmenu-header-link.p-menuitem-link-active,
+::ng-deep.p-menuitem-link:hover {
+  box-shadow: none !important;
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-left-color: #f63740 !important;
+}
+
+::ng-deep.p-toggleable-content {
+  border: none !important;
+}
+
+.sidenav ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  list-style: none;
+}
+
+.sidenav ul li {
+  padding: 0.1em;
+  margin: 1em;
+}
+
+::ng-deep .p-menubar {
+  background: linear-gradient(45deg, #ee0979, #ff6a00) !important;
+  margin: 0;
+}
+
+::ng-deep .p-menubar-button {
+  display: none !important;
+}
+
+::ng-deep .p-slidemenu {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+::ng-deep .p-panelmenu-panel {
+  margin-top: 0.5em;
+}
+
+.content-wrapper {
+  margin-left: 200px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 70px;
+
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.dropdown-menu {
+  position: absolute;
+  width: 270px;
+  padding: 0;
+  background-color: rgb(232, 228, 228);
+  top: inherit;
+  right: 10px;
+  border-radius: 12px;
+  z-index: 99 !important;
+  padding: 10px 0px;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  /* box-shadow: inset 0 0 10px #d17676e9, 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12); */
+
+  box-shadow: inset 0 0 4px #767676, rgba(17, 17, 26, 0.1) 0px 8px 24px,
+    rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
+}
+.user-details {
+  /* margin: 0 1em; */
+
+  /* position: relative; */
+  z-index: 99 !important;
+  padding-bottom: 10px;
+}
+.avatar {
+  height: 56px;
+  width: 56px;
+  border-radius: 50%;
+  margin: 0 5px;
+  padding: 5px;
+}
+.media-body {
+  margin-top: 15px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  padding-bottom: 0;
+  letter-spacing: 1px;
+}
+.line-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #7b7b7b5f;
+}
+.p-grid {
+  height: 60px;
+}
+
+.user-details:hover {
+  background-color: rgb(143, 143, 143);
+  cursor: pointer;
+  border-radius: 10px;
+}
+.list-settings {
+  margin: 0.5rem;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 10px;
+
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+
+  letter-spacing: 1px;
+}
+.dropdown-item:hover {
+  color: rgb(232, 232, 232);
+  background-color: rgb(143, 143, 143);
+}
+.icon-item {
+  padding-right: 7px;
+}
+.logo-image {
+}
+.logo-wrapper {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 9px;
+  padding-top: 10px;
+  border-bottom: 2px solid #d10202;
+  background-color: white;
+}

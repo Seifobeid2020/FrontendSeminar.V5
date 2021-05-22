@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Goblin+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+.profile-wrapper {
+  margin-top: 20px;
+}
+.user-image {
+  border: 3px solid rgb(30, 71, 131);
+  border-radius: 50%;
+  width: 182px;
+  height: 182px;
+}
+.edit-user-image {
+  top: -10px;
+  left: -50px;
+  background-color: rgb(22, 191, 118);
+}
+.profile-content-wrapper {
+  margin-top: 50px;
+  margin-left: 50px;
+}
+input,
+label {
+  display: block;
+}
+.line-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #7b7b7b5f;
+}
+.user-details-header {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Goblin One", cursive;
+}
+label {
+  font-family: "Arimo", sans-serif;
+}
+.change-password-button {
+  background: rgb(92, 180, 62);
+  background: linear-gradient(
+    47deg,
+    rgba(92, 180, 62, 1) 0%,
+    rgba(59, 142, 23, 0.9192051820728291) 54%,
+    rgba(54, 105, 17, 0.9920343137254902) 100%
+  );
+  font-family: "Roboto Slab", serif;
+  border: none;
+}
+.change-password-button:hover {
+  background: rgb(92, 180, 62);
+  background: linear-gradient(
+    47deg,
+    rgba(92, 180, 62, 1) 0%,
+    rgba(59, 142, 23, 0.9192051820728291) 54%,
+    rgba(54, 105, 17, 0.9920343137254902) 100%
+  );
+}
+.save-user-details,
+.save-user-details:hover {
+  background: rgb(0, 139, 235);
+  background: linear-gradient(
+    51deg,
+    rgba(0, 139, 235, 0.9023984593837535) 6%,
+    rgba(12, 94, 255, 0.8575805322128851) 90%
+  );
+  font-family: "Roboto Slab", serif;
+  border: none;
+  margin-right: 10px;
+}
+.cancle-user-details,
+.cancle-user-details:hover {
+  background: rgb(235, 46, 0);
+  background: linear-gradient(
+    51deg,
+    rgba(235, 46, 0, 0.9023984593837535) 6%,
+    rgba(255, 69, 12, 0.8575805322128851) 100%
+  );
+  font-family: "Roboto Slab", serif;
+  border: none;
+}
+.image-edit-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-image-dialog {
+  border: 3px solid rgb(144, 191, 206);
+  border-radius: 10px;
+  width: 182px;
+  height: 182px;
+}

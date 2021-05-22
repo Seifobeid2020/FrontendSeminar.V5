@@ -1,0 +1,130 @@
+<div class="p-shadow-5 container">
+  <p-toolbar styleClass="p-mb-4">
+    <!-- Advance Reports Button -->
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="Go Back To Reports"
+        icon="pi pi-chart-line"
+        class="p-button-success p-mr-2"
+        [routerLink]="['/radiologist/reports']"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #advanceReportTable
+    [value]="reports"
+    dataKey="id"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
+    styleClass="p-datatable-customers p-datatable-gridlines"
+    [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['typeOfReport', 'date', 'balance']"
+    (onFilter)="changeTotalBalance($event)"
+  >
+    <ng-template pTemplate="caption">
+      <!-- <div class="">
+      <span class="p-input-icon-left p-ml-auto">sadsa </span>
+    </div> -->
+      <!-- <div class="p-d-flex">
+      <span class="p-input-icon-left p-ml-auto">
+        <i class="pi pi-search"></i>
+
+      </span>
+    </div>  -->
+
+      <div class="p-d-flex">
+        <span class="p-input-icon-left p-ml-auto">
+          The total Amount is:
+
+          <span
+            class="balancePositive"
+            [ngClass]="{ balanceNegative: balanceStyle(totalAmount) }"
+            style="padding: 3px"
+          >
+            {{ totalAmount }}
+          </span>
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Report Kind
+            <p-columnFilter
+              type="text"
+              field="reportKind"
+              display="menu"
+            ></p-columnFilter>
+          </div>
+        </th>
+
+        <th>
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Type of Report Kind
+            <p-columnFilter
+              type="text"
+              field="typeOfReportKind"
+              display="menu"
+            ></p-columnFilter>
+          </div>
+        </th>
+
+        <th>
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Date
+            <p-columnFilter
+              type="date"
+              field="date"
+              display="menu"
+            ></p-columnFilter>
+          </div>
+        </th>
+
+        <th>
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Balance
+            <p-columnFilter
+              type="numeric"
+              field="balance"
+              display="menu"
+              currency="USD"
+            ></p-columnFilter>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-report>
+      <tr>
+        <td>
+          {{ report.reportKind }}
+        </td>
+        <td>
+          {{ report.typeOfReportKind }}
+        </td>
+        <td>
+          {{ report.date | date: "MM/dd/yyyy" }}
+        </td>
+        <td>
+          <span
+            class="balancePositive"
+            [ngClass]="{ balanceNegative: balanceStyle(report.balance) }"
+            style="padding: 4px"
+            >{{ report.balance | currency: "USD":"symbol" }}
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7">No reports found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

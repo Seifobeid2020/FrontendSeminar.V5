@@ -1,0 +1,90 @@
+<p-menubar>
+  <ng-template pTemplate="end">
+    <img
+      [src]="
+        userData.photoURL
+          ? userData.photoURL
+          : '/assets/images/default-user-image.png'
+      "
+      alt="profile image"
+      (click)="onClickUserProfile()"
+      class="profile-image"
+      id="accountSettings"
+      [ngStyle]="{
+        border: showAccountSettings
+          ? '3px solid rgba(255, 255, 255, 0.898)'
+          : 'none'
+      }"
+    />
+  </ng-template>
+</p-menubar>
+
+<div
+  class="dropdown-menu"
+  (clickOutside)="onClickedOutside($event)"
+  *ngIf="showAccountSettings"
+>
+  <div
+    class="user-details"
+    (click)="onClickUserProfile()"
+    [routerLink]="['./profile']"
+  >
+    <div class="p-grid">
+      <div class="p-col-3">
+        <img
+          [src]="
+            userData.photoURL
+              ? userData.photoURL
+              : '/assets/images/default-user-image.png'
+          "
+          [alt]="userData.displayName"
+          class="avatar"
+        />
+      </div>
+      <div class="p-col-9 media-body">
+        <span>
+          <b> {{ userData.displayName }}</b>
+        </span>
+        <br />
+        <span> {{ userData.email }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="line-divider"></div>
+  <div class="list-settings">
+    <div
+      class="dropdown-item"
+      (click)="onClickUserProfile()"
+      [routerLink]="['./profile']"
+    >
+      <i class="pi pi-user icon-item"></i> Profile
+    </div>
+    <div class="dropdown-item" (click)="onClickUserAccount()">
+      <i class="pi pi-credit-card icon-item"></i> Account
+    </div>
+    <!-- change this  Setting -->
+    <div class="dropdown-item" (click)="onClickUserProfile()">
+      <i class="pi pi-cog icon-item"></i> Setting
+    </div>
+    <div class="dropdown-item" (click)="logout()">
+      <i class="pi pi-power-off icon-item"></i> Logout
+    </div>
+  </div>
+</div>
+
+<div class="sidenav-wrapper">
+  <div class="logo-wrapper">
+    <img class="logo-image" src="/assets/logoLast_2.png" alt="not found" />
+  </div>
+
+  <div class="sidenav">
+    <p-panelMenu [model]="itemsSideNav"></p-panelMenu>
+  </div>
+</div>
+
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <router-outlet></router-outlet>
+  </div>
+</div>
