@@ -277,6 +277,7 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
               );
               this.isEditMode = false;
               this.treatmentDialog = false;
+              this.uploadProgress$ = null;
               this.messageService.add({
                 severity: 'success',
                 summary: 'Successful',
@@ -331,6 +332,7 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
                 .push(fileUpload);
               this.isEditMode = false;
               this.treatmentDialog = false;
+              this.uploadProgress$ = null;
               this.messageService.add({
                 severity: 'success',
                 summary: 'Successful',
