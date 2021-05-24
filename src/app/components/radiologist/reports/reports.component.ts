@@ -39,15 +39,11 @@ export class ReportsComponent implements OnInit {
     return balance < 0 ? true : false;
   }
   changeTotalBalance(event) {
-    console.log(event);
     if (event.filteredValue) {
       this.totalAmount = 0;
       event.filteredValue.forEach((report) => {
         this.totalAmount += report.balance;
       });
     }
-  }
-  onClean(event) {
-    console.log(event);
   }
 }

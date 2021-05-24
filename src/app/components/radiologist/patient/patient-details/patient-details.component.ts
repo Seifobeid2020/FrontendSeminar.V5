@@ -17,6 +17,7 @@ import { Location } from '@angular/common';
 import { AuthService } from 'src/app/components/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-patient-details',
@@ -34,7 +35,8 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
     private db: AngularFireDatabase,
     private location: Location,
     private authService: AuthService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private http: HttpClient
   ) {}
 
   sub: Subscription;
@@ -74,7 +76,11 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
   fileName = '';
   uploadProgress$: Observable<number>;
   private basePath = '/profileImages';
+  // spinner
+  showSpinner: boolean = false;
 
+  isValidPanoramicImage: boolean = true;
+  checkValueRecived: boolean = false;
   ngOnInit(): void {
     this.userData = this.authService.getUser();
     this.id = this.route.snapshot.params.id;
@@ -150,6 +156,7 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
       });
       return;
     }
+    this.showSpinner = false;
     this.treatment = { userId: '', treatmentCost: 0 };
     this.submitted = false;
     this.treatmentDialog = true;
@@ -239,7 +246,7 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
     if (!this.selectedFiles) {
       return;
     }
-    console.log('this is isEditMode:', this.isEditMode);
+
     // if edite
     if (this.isEditMode) {
       // await this.upload().then((fileUpload) => {
@@ -270,7 +277,6 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
         .snapshotChanges()
         .pipe(
           finalize(() => {
-            console.log('tests?');
             fileRef.getDownloadURL().subscribe((url) => {
               let treatment: Treatment = {
                 treatmentId: this.treatment.treatmentId,
@@ -321,14 +327,12 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
       const uploadTask = this.storage.upload(filePath, fileUpload);
       const fileRef = this.storage.ref(filePath);
       this.uploadProgress$ = uploadTask.percentageChanges();
-      console.log('this is return fileUpload ', fileUpload);
 
       uploadTask
         .snapshotChanges()
         .pipe(
           finalize(() => {
             fileRef.getDownloadURL().subscribe((url) => {
-              console.log('this is return url ', url);
               let newTreatment: Treatment = {
                 userId: '',
                 patientId: this.id,
@@ -420,23 +424,57 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
     // const message: MessagePatient = { imageUrl: treatment.url };
     // this.mService.createMessage(message);
     this.treatment = { ...treatment };
+    this.isValidPanoramicImage = true;
+    this.checkValueRecived = false;
+    this.submitted = false;
   }
 
   onSendToDoctor() {
-    this.radiologistService.sendToDoctor(
-      this.selectedDoctor,
-      this.treatment,
-      this.patientDetails
-    );
+    if (!this.selectedDoctor) {
+      this.submitted = true;
+      return;
+    }
+    this.showSpinner = true;
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'Send To Doctor',
-      life: 1500,
-    });
+    this.http
+      .post('https://localhost:5021/gateway/image/validation', {
+        imageURL: this.treatment.treatmentImageUrl,
+        imageName: this.treatment.treatmentImageName,
+      })
+      .subscribe((result: any) => {
+        //if true we need to send it
+        if (result) {
+          this.showSpinner = false;
+          this.radiologistService.sendToDoctor(
+            this.selectedDoctor,
+            this.treatment,
+            this.patientDetails
+          );
 
-    this.sendToDoctorDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Send To Doctor',
+            life: 1500,
+          });
+
+          this.sendToDoctorDialog = false;
+        }
+        //if true we need to privent send message
+        else {
+          this.showSpinner = false;
+          this.isValidPanoramicImage = false;
+          this.checkValueRecived = true;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Not Valid Image ',
+            detail: "Sorry We can't Sent it ",
+            life: 3000,
+          });
+        }
+      });
+
+    return;
   }
 
   ngOnDestroy() {

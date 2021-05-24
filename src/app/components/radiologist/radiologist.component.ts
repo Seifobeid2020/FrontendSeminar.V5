@@ -20,7 +20,6 @@ export class RadiologistComponent implements OnInit {
   ngOnInit() {
     this.userData = this.authService.getUser();
 
-    console.log(this.userData);
     this.itemsSideNav = [
       {
         label: 'Dashboard',

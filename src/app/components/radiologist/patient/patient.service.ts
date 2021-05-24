@@ -38,7 +38,6 @@ export class PatientService {
     this.http
       .put<Patient>(this.gatewayBaseUrl + `patients/${id}`, patient)
       .subscribe((result) => {
-        console.log(result);
         this.patientsChanged.next(result);
       });
   }
@@ -84,7 +83,6 @@ export class PatientService {
   }
 
   editTreatment(id: number, treatment: Treatment) {
-    console.log(treatment);
     this.http
       .put<Treatment>(this.gatewayBaseUrl + `treatments/${id}`, treatment)
       .subscribe((result) => {

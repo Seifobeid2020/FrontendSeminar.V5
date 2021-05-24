@@ -69,7 +69,6 @@ export class MessagePatientService implements OnInit {
   async getUID() {
     let id;
     await this.auth.onAuthStateChanged((user) => {
-      console.log('this is uid', user.uid);
       id = user.uid;
     });
     return id;
@@ -95,7 +94,6 @@ export class MessagePatientService implements OnInit {
     // });
   }
   async getMessage(messageUID) {
-    console.log(messageUID);
     let message;
     // this.afs
     //   .collection('messages', (ref) => ref.where('uid', '==', messageUID))

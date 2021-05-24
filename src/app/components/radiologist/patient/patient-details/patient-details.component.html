@@ -283,7 +283,45 @@
         </div>
       </ng-template>
     </p-dropdown>
+    <div *ngIf="!selectedDoctor && submitted">
+      <div class="p-mr-2" style="color: rgb(214, 32, 0); font-size: 20px">
+        Please Select A Dintist...
+      </div>
+    </div>
+
+    <div class="p-grid" *ngIf="showSpinner">
+      <div class="p-col-6 p-offset-4">
+        <p-progressSpinner class="p-as-center"></p-progressSpinner>
+      </div>
+      <div class="p-col-12">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <div class="p-d-flex p-jc-center">
+              <div
+                class="p-mr-2"
+                style="color: rgb(214, 32, 0); font-size: 20px"
+              >
+                Wait Please...
+              </div>
+            </div>
+          </div>
+          <div class="p-col-12" style="color: rgb(169, 61, 3)">
+            <div class="p-d-flex p-jc-center">
+              <div>We NEED to Check If It Is Panoramic X-Ray Image</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-grid" *ngIf="!isValidPanoramicImage && checkValueRecived">
+      <div class="p-d-flex p-jc-center">
+        <div class="p-mr-2" style="color: rgb(214, 32, 0); font-size: 20px">
+          Sorry Not Valid Panoramic Image
+        </div>
+      </div>
+    </div>
   </div>
+
   <!-- Save and Cancel Dilog-->
   <ng-template pTemplate="footer">
     <button

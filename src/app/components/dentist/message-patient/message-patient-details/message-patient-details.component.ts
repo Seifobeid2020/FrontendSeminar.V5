@@ -64,17 +64,15 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'];
-      console.log('this ', this.id);
+
       this.messagePatientService.getMessage(this.id).then((e) =>
         e.subscribe((f) => {
-          console.log(f.data());
           this.messagePatientDetails = f.data();
           this.imageAIUrl = this.messagePatientDetails.imageUrlAfterAI;
-          console.log('this.imageAIUrlL :', this.imageAIUrl);
+
           this.imageObject[0].image = this.messagePatientDetails.imageUrl;
           this.imageObject[0].thumbImage = 'Patient Image ';
           if (this.messagePatientDetails.imageUrlAfterAI) {
-            console.log('hiii');
             this.imageAfterML[0].image =
               this.messagePatientDetails.imageUrlAfterAI;
             this.imageAfterML[0].thumbImage =
@@ -93,13 +91,11 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
         imageURL: this.messagePatientDetails.imageUrl,
       })
       .subscribe((result: any) => {
-        console.log(result);
         this.imageAIUrl = result;
         this.imageAfterML[0].image = result;
         this.imageAfterML[0].thumbImage =
           'Patient Image After Machine Learning';
 
-        console.log('imageAfterML: ', this.imageAfterML);
         this.angularFirestore.collection('messages').doc(this.id).update({
           imageUrlAfterAI: result,
         });

@@ -125,10 +125,7 @@ export class RadiologistService {
           senderPhoneNumber: doc.data().phoneNumber,
         };
 
-        this.afs
-          .collection('messages')
-          .add(message)
-          .then((message) => console.log(message));
+        this.afs.collection('messages').add(message).then();
       });
   }
 

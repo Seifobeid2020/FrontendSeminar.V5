@@ -82,7 +82,7 @@ export class ExpenseTypeComponent implements OnInit {
           detail: 'Patient Deleted',
           life: 1500,
         });
-        console.log('this is from delete : ', expenseType);
+
         this.radiologistService.deleteExpenseType(expenseType.expenseTypeId);
       },
     });
@@ -93,8 +93,6 @@ export class ExpenseTypeComponent implements OnInit {
     // if (this.treatmentType. && this.patient.firstName.trim()) {
     // if edit
     if (this.isEditMode) {
-      console.log('Hiii from edit!!');
-      console.log(this.expenseType);
       this.radiologistService.editExpenseType(
         this.expenseType.expenseTypeId,
         this.expenseType

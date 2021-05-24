@@ -60,16 +60,12 @@ export class DentistComponent implements OnInit, OnDestroy {
         )
         .snapshotChanges()
         .subscribe((events) => {
-          console.log('eventsL: ', events);
-
           events.forEach((change: any) => {
             if (change.type == 'added') {
               let tempMessage: any = change.payload.doc.data();
               tempMessage.messageId = change.payload.doc.id;
               this.messagesArray = [tempMessage, ...this.messagesArray];
-              // console.log('frim added', change.payload.doc.data());
             } else if (change.type == 'modified') {
-              // console.log('frim modifier', change.payload.doc.data());
             }
           });
 
@@ -118,7 +114,6 @@ export class DentistComponent implements OnInit, OnDestroy {
   }
 
   onClickedOutside(event) {
-    console.log('object');
     var target = event.target || event.srcElement || event.currentTarget;
     var idAttr = target.attributes.id;
 

@@ -80,7 +80,7 @@ export class PatientTableComponent implements OnInit, OnDestroy {
         var indexOfModefied = this.patients.findIndex(
           (p) => p.patientId == response.patientId
         );
-        console.log('thois is is : ', response);
+
         this.patients[indexOfModefied] = response;
       } else {
         response.totalTreatmentCost = this.selectedTreatmentType.defaultCost;
@@ -180,7 +180,7 @@ export class PatientTableComponent implements OnInit, OnDestroy {
     this.submitted = true;
     var pattern =
       /(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\s*[)]?[-\s\.]?[(]?[0-9]{1,3}[)]?([-\s\.]?[0-9]{3})([-\s\.]?[0-9]{3,4})/;
-    console.log();
+
     if (!pattern.test(this.patient.phoneNumber)) {
       return;
     }
@@ -189,7 +189,6 @@ export class PatientTableComponent implements OnInit, OnDestroy {
     if (this.patient.firstName && this.patient.firstName.trim()) {
       // if edit
       if (this.isEditMode) {
-        console.log('Hiii from edit!!');
         this.patient.gender = this.selectedgenderValue == 'Male' ? 1 : 0;
         this.messageService.add({
           severity: 'success',

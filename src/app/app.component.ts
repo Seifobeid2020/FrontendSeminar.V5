@@ -39,9 +39,7 @@ export class AppComponent implements OnInit {
         .subscribe((res) => {
           this.afAuth
             .signInWithCustomToken(res.token)
-            .then((userCrud) => {
-              console.log('User loggen in');
-            })
+            .then((userCrud) => {})
             .catch((err) => {
               window.location.href = 'http://localhost:3000/login.html';
             });
@@ -59,7 +57,6 @@ export class AppComponent implements OnInit {
         });
       } else {
         localStorage.setItem('user', null);
-        console.log(JSON.parse(localStorage.getItem('user')));
       }
     });
     // this.authServie.SignOut();
@@ -68,7 +65,7 @@ export class AppComponent implements OnInit {
   async getCustomClaimRole() {
     await firebase.auth().currentUser.getIdToken(true);
     const decodedToken = await firebase.auth().currentUser.getIdTokenResult();
-    console.log(decodedToken.claims.stripeRole);
+
     return decodedToken.claims.stripeRole;
   }
 

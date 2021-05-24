@@ -75,8 +75,6 @@ export class ProfileComponent implements OnInit {
           value: this.inEditUserData.city,
           name: this.inEditUserData.city,
         };
-
-        console.log(this.selectedCity);
       });
   }
   onClickEditUserDetails() {
@@ -86,7 +84,7 @@ export class ProfileComponent implements OnInit {
     this.isEditMode = false;
 
     this.inEditUserData = { ...this.userData };
-    console.log(this.selectedCity);
+
     this.selectedCity = {
       value: this.inEditUserData.city,
       name: this.inEditUserData.city,
@@ -103,7 +101,7 @@ export class ProfileComponent implements OnInit {
     // // this.submitted = false;
     // this.isEditMode = false;
     this.changePasswordDialog = false;
-    console.log(this.changePasswordForm.get('password'));
+
     this.changePasswordForm.get('password').setValue(null);
     this.changePasswordForm.get('password').setErrors(null);
     this.changePasswordForm.get('passwordConfirm').setValue(null);
@@ -115,7 +113,7 @@ export class ProfileComponent implements OnInit {
   //  Change & Upload Image
   async saveImageProfile() {
     // await this.upload().then((fileUpload) => {});
-    console.log('selectedFiles: ', this.selectedFiles.item(0));
+
     let fileUpload: any = this.selectedFiles.item(0);
     const filePath = `${this.basePath}/${this.userData.uid}/${fileUpload.name}`;
     const uploadTask = this.storage.upload(filePath, fileUpload);
@@ -169,9 +167,6 @@ export class ProfileComponent implements OnInit {
   //  Change & Upload Password
 
   onSaveChangePassword() {
-    console.log(this.passwordConfirm);
-    console.log(this.password);
-
     this.user
       .updatePassword(this.changePasswordForm.get('password').value)
       .then((s) => console.log(s))
@@ -208,7 +203,6 @@ export class ProfileComponent implements OnInit {
             this.formEditProfile.controls.email.dirty &&
             this.inEditUserData.email != this.userData.email
           ) {
-            console.log('edit the email');
             this.userData.email = this.inEditUserData.email;
 
             this.user
@@ -228,7 +222,6 @@ export class ProfileComponent implements OnInit {
             this.formEditProfile.controls.phoneNumber.dirty &&
             this.inEditUserData.phoneNumber != this.userData.phoneNumber
           ) {
-            console.log('edit the phoneNumber');
             this.userData.phoneNumber = this.inEditUserData.phoneNumber;
 
             // this.user
@@ -248,11 +241,10 @@ export class ProfileComponent implements OnInit {
             this.formEditProfile.controls.displayName.dirty &&
             this.inEditUserData.displayName != this.userData.displayName
           ) {
-            console.log('edit the displayName');
             this.userData.displayName = this.inEditUserData.displayName;
             this.user
               .updateProfile({ displayName: this.userData.displayName })
-              .then((s) => console.log(s))
+              .then()
               .catch((err) => console.log(err));
             this.angularFirestore
               .collection('users')
@@ -267,7 +259,6 @@ export class ProfileComponent implements OnInit {
             this.formEditProfile.controls.city.dirty &&
             this.inEditUserData.city != this.userData.city
           ) {
-            console.log('edit the city');
             this.userData.city = this.inEditUserData.city;
             this.angularFirestore
               .collection('users')
@@ -300,19 +291,12 @@ export class ProfileComponent implements OnInit {
     this.selectedFiles = null;
     this.fileName = null;
   }
-  onSubmit(event: NgForm) {
-    console.log(event.form);
-  }
-  onChangePassword() {
-    console.log();
-  }
+  onSubmit(event: NgForm) {}
+  onChangePassword() {}
   onChangeCity() {
-    console.log(this.selectedCity);
     this.inEditUserData.city = this.selectedCity.name;
   }
-  onPasswordSubmit() {
-    console.log(this.changePasswordForm);
-  }
+  onPasswordSubmit() {}
   cities: any[] = [
     { value: 'Jerusalem', name: 'Jerusalem' },
     { value: 'Bethlehem', name: 'Bethlehem' },

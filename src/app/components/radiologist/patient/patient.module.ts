@@ -31,6 +31,8 @@ import { SharedModule } from 'src/shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { PatientComponent } from './patient.component';
 
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @NgModule({
   declarations: [
     PatientTableComponent,
@@ -61,6 +63,7 @@ import { PatientComponent } from './patient.component';
     PatientsRoutingModule,
     SharedModule,
     RouterModule,
+    ProgressSpinnerModule,
   ],
 
   providers: [MessageService, ConfirmationService],

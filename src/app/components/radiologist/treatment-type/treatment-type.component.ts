@@ -30,7 +30,6 @@ export class TreatmentTypeComponent implements OnInit {
 
   ngOnInit(): void {
     this.radiologistService.getTreatmentTypes().then((data) => {
-      console.log(data);
       this.treatmentTypes = data;
     });
 
@@ -94,8 +93,6 @@ export class TreatmentTypeComponent implements OnInit {
     // if (this.treatmentType. && this.patient.firstName.trim()) {
     // if edit
     if (this.isEditMode) {
-      console.log('Hiii from edit!!');
-      console.log(this.treatmentType);
       this.radiologistService.editTreatmentType(
         this.treatmentType.treatmentTypeId,
         this.treatmentType

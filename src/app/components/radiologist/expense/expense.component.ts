@@ -49,7 +49,6 @@ export class ExpenseComponent implements OnInit {
 
     this.radiologistService.getExpenses().then((response) => {
       this.expenses = response;
-      console.log(this.expenses);
     });
 
     this.sub = this.radiologistService.expenseChanged.subscribe((response) => {
@@ -57,7 +56,6 @@ export class ExpenseComponent implements OnInit {
         (p) => p.expenseId == response.expenseId
       );
       if (arr.length > 0) {
-        console.log('we came in ' + JSON.stringify(response));
         var indexOfModefied = this.expenses.findIndex(
           (p) => p.expenseId == response.expenseId
         );
@@ -167,8 +165,6 @@ export class ExpenseComponent implements OnInit {
 
     // if edit
     if (this.isEditMode) {
-      console.log('Hiii from edit!!');
-      // console.log(this.selectedExpenseType.expenseTypeId);
       // this.expense.expenseTypeId = this.selectedExpenseTypeNumber;
 
       // let newEditedExpense: Expense = {
@@ -183,7 +179,7 @@ export class ExpenseComponent implements OnInit {
       this.expense.expenseType = this.expenseTypes.find(
         (x) => x.expenseTypeId == this.selectedExpenseTypeNumber
       );
-      console.log(this.expense);
+
       this.radiologistService.editExpense(this.expense.expenseId, this.expense);
       this.expenseDialog = false;
       this.isEditMode = false;
@@ -197,7 +193,6 @@ export class ExpenseComponent implements OnInit {
     }
     // if add
     else {
-      console.log('Hiii from add!!');
       // console.log(this.selectedExpenseType.expenseTypeId);
       let newExpense: Expense = {
         userId: '',
@@ -218,7 +213,6 @@ export class ExpenseComponent implements OnInit {
   }
 
   seeChange(event) {
-    console.log(event);
     // this.selectedExpenseTypeNumber = event.value;
   }
   ngOnDestroy() {

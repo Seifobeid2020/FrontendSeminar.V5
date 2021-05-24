@@ -34,44 +34,11 @@ export class MessagePatientTableComponent implements OnInit, OnDestroy {
     private afs: AngularFirestore
   ) {
     this.auth.onAuthStateChanged((user) => {
-      console.log(user.uid);
       this.userUID = user.uid;
     });
   }
 
   async ngOnInit() {
-    // await this.messagePatientService
-    //   .getMessages(this.userUID)
-    //   .then((e) => {
-    //     e.subscribe((events) => {
-    //       var arr = [];
-
-    //       events.forEach((change: any) => {
-    //         if (change.type == 'added') {
-    //           let tempMessage: any = change.payload.doc.data();
-    //           tempMessage.messageId = change.payload.doc.id;
-    //           arr = [tempMessage, ...arr];
-    //         } else if (change.type == 'modified') {
-    //         }
-    //       });
-
-    //       if (arr.length !== 0) {
-    //         arr.sort((a, b) => {
-    //           return b.sentAt - a.sentAt;
-    //         });
-
-    //         if (this.first) {
-    //           this.messagePatients = [...arr];
-    //           this.first = false;
-    //         } else {
-    //           this.messagePatients = [arr[0], ...this.messagePatients];
-    //         }
-    //         console.log('this is message arr:', this.messagePatients);
-    //       }
-    //     });
-    //   })
-    //   .catch((e) => console.log('waitting for id'));
-
     let arr = [];
     await this.auth.onAuthStateChanged((user) => {
       this.sub = this.afs
