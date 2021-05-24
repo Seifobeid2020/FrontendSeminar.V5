@@ -141,6 +141,15 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
   }
 
   openNew() {
+    if (this.treatmentTypes.length == 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Treatment Type Needed',
+        detail: 'Please Add Treatment Type from Settings ',
+        life: 5000,
+      });
+      return;
+    }
     this.treatment = { userId: '', treatmentCost: 0 };
     this.submitted = false;
     this.treatmentDialog = true;

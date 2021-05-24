@@ -40,8 +40,10 @@ export class ExpenseComponent implements OnInit {
   ngOnInit(): void {
     this.radiologistService.getExpenseType().then((response) => {
       this.expenseTypes = response;
+      if (this.expenseTypes.length != 0) {
+        this.selectedExpenseTypeNumber = this.expenseTypes[0].expenseTypeId;
+      }
 
-      this.selectedExpenseTypeNumber = this.expenseTypes[0].expenseTypeId;
       // console.log(this.selectedExpenseTypeNumber);
     });
 
@@ -84,6 +86,15 @@ export class ExpenseComponent implements OnInit {
   }
 
   openNew() {
+    if (this.expenseTypes.length == 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Expense Types Needed',
+        detail: 'Please Add Expense Types from Settings ',
+        life: 5000,
+      });
+      return;
+    }
     this.expense = {
       userId: '',
       expenseDescription: '',

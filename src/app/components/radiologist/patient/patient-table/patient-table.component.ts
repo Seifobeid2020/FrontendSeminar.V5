@@ -100,6 +100,15 @@ export class PatientTableComponent implements OnInit, OnDestroy {
   }
 
   openNew() {
+    if (this.treatmentTypes.length == 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Treatment Type Needed',
+        detail: 'Please Add Treatment Type from Settings ',
+        life: 5000,
+      });
+      return;
+    }
     this.patient = {
       userId: '',
       firstName: '',
