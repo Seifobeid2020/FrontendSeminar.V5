@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
 :host ::ng-deep {
   /* Responsive */
 }
@@ -118,4 +119,25 @@
 
 .p-invalid {
   color: red;
+}
+
+.add-new-patient-button {
+  background: rgb(92, 180, 62);
+  background: linear-gradient(
+    47deg,
+    rgba(92, 180, 62, 1) 0%,
+    rgba(59, 142, 23, 0.9192051820728291) 54%,
+    rgba(54, 105, 17, 0.9920343137254902) 100%
+  );
+  font-family: "Roboto Slab", serif;
+  border: none;
+}
+.add-new-patient-button:hover {
+  background: rgb(92, 180, 62);
+  background: linear-gradient(
+    47deg,
+    rgba(92, 180, 62, 1) 0%,
+    rgba(59, 142, 23, 0.9192051820728291) 54%,
+    rgba(54, 105, 17, 0.9920343137254902) 100%
+  );
 }

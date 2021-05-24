@@ -227,6 +227,9 @@ export class PatientDetailsComponent implements OnInit, OnDestroy {
   }
   async saveTreatment() {
     this.submitted = true;
+    if (!this.selectedFiles) {
+      return;
+    }
     console.log('this is isEditMode:', this.isEditMode);
     // if edite
     if (this.isEditMode) {

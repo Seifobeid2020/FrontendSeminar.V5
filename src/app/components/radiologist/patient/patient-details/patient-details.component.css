@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+
 .sendButton:hover {
   transition-duration: 1s;
   background-color: transparent;
@@ -11,3 +13,27 @@
   background-color: #b2b2b3;
   border: 1px solid #b2b2b3;
 } */
+
+.add-new-treatment-button {
+  background: rgb(92, 180, 62);
+  background: linear-gradient(
+    47deg,
+    rgba(92, 180, 62, 1) 0%,
+    rgba(59, 142, 23, 0.9192051820728291) 54%,
+    rgba(54, 105, 17, 0.9920343137254902) 100%
+  );
+  font-family: "Roboto Slab", serif;
+  border: none;
+}
+.add-new-treatment-button:hover {
+  background: rgb(92, 180, 62);
+  background: linear-gradient(
+    47deg,
+    rgba(92, 180, 62, 1) 0%,
+    rgba(59, 142, 23, 0.9192051820728291) 54%,
+    rgba(54, 105, 17, 0.9920343137254902) 100%
+  );
+}
+.p-invalid {
+  color: red;
+}

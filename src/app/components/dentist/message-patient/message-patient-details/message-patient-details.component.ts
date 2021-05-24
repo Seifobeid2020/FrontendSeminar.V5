@@ -89,7 +89,7 @@ export class MessagePatientDetailsComponent implements OnInit, OnDestroy {
     this.showSpinner = true;
 
     this.http
-      .post('http://localhost:8000/api/image/', {
+      .post('https://localhost:5021/gateway/image/', {
         imageURL: this.messagePatientDetails.imageUrl,
       })
       .subscribe((result: any) => {

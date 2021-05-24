@@ -7,9 +7,9 @@
       <button
         pButton
         pRipple
-        label="New"
+        label="New Treatment"
         icon="pi pi-plus"
-        class="p-button-success p-mr-2"
+        class="add-new-treatment-button p-mr-2"
         (click)="openNew()"
       ></button>
     </ng-template>
@@ -85,13 +85,19 @@
     <ng-template pTemplate="body" let-treatment>
       <tr>
         <td>
-          <a [href]="treatment.treatmentImageUrl">
+          <a
+            [href]="treatment.treatmentImageUrl"
+            *ngIf="treatment.treatmentImageUrl; else noImage"
+          >
             <img
               [src]="treatment.treatmentImageUrl"
               [alt]="treatment.treatmentImageName"
               width="80"
             />
           </a>
+          <ng-template #noImage>
+            <div>No Image Yet.</div>
+          </ng-template>
         </td>
 
         <td>{{ treatment.treatmentName }}</td>
@@ -196,6 +202,10 @@
         styleClass="p-button-success"
         (click)="fileInput.click()"
       ></p-button>
+
+      <small class="p-invalid" *ngIf="submitted && !selectedFiles"
+        >Image is required.</small
+      >
       {{ fileName ? fileName : "" }}
       <div
         *ngIf="uploadProgress$ | async | number: '1.0-0' as progress"

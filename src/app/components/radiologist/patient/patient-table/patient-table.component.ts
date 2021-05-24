@@ -1,11 +1,12 @@
 import { RadiologistService } from './../../radiologist.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Patient } from '../../shared/models/patient.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PatientService } from '../patient.service';
 import { Subscription } from 'rxjs';
 import { TreatmentType } from '../../shared/models/treatment-type.model';
 import { Treatment } from '../../shared/models/treatment.model';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-patient-table',
@@ -22,6 +23,8 @@ import { Treatment } from '../../shared/models/treatment.model';
   styleUrls: ['./patient-table.component.css'],
 })
 export class PatientTableComponent implements OnInit, OnDestroy {
+  @ViewChild('phoneNumber', { static: true }) phoneNumber: NgModel;
+
   patientDialog: boolean;
 
   sub: Subscription;
@@ -101,7 +104,7 @@ export class PatientTableComponent implements OnInit, OnDestroy {
       userId: '',
       firstName: '',
       lastName: '',
-      age: null,
+      age: 1,
       gender: this.selectedgenderValue == 'Male' ? 1 : 0,
       phoneNumber: '',
     };
@@ -166,6 +169,14 @@ export class PatientTableComponent implements OnInit, OnDestroy {
 
   savePatient() {
     this.submitted = true;
+    var pattern =
+      /(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\s*[)]?[-\s\.]?[(]?[0-9]{1,3}[)]?([-\s\.]?[0-9]{3})([-\s\.]?[0-9]{3,4})/;
+    console.log();
+    if (!pattern.test(this.patient.phoneNumber)) {
+      return;
+    }
+
+    if (this.patient.age < 1 || this.patient.age > 150) return;
     if (this.patient.firstName && this.patient.firstName.trim()) {
       // if edit
       if (this.isEditMode) {

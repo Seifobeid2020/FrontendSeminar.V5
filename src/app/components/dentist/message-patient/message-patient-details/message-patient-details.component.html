@@ -19,20 +19,19 @@
 
         <div class="p-col-12 p-as-center">
           <div class="p-grid">
-            <div class="p-col-6 p-offset-6">
+            <div class="p-col-8 p-offset-4">
               <div class="box">
-                <button
-                  pButton
-                  pRipple
-                  label=" Send to AI"
-                  class="p-button-success p-mr-2"
-                  (click)="sendToAIConverter()"
-                >
+                <a class="p-mr-2" (click)="sendToAIConverter()">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                   <fa-icon
                     [icon]="faRobot"
                     style="padding-right: 5px"
                   ></fa-icon>
-                </button>
+                  Send to AI
+                </a>
               </div>
             </div>
           </div>
